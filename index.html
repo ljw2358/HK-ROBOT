@@ -5,163 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HK-FIGURE</title>
     <style>
-        /* 기본 스타일 및 테마 */
-        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #0a0a0c; color: #e0e0e0; line-height: 1.7; }
-        .container { width: 90%; margin: 0 auto; max-width: 1200px; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: #050505; color: #fff; line-height: 1.6; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        header { background: rgba(0,0,0,0.9); padding: 20px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 2px solid #007bff; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 28px; font-weight: 900; color: #007bff; text-decoration: none; }
         
-        /* 헤더 & 다국어 네비게이션 */
-        header { background-color: rgba(10, 10, 12, 0.95); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 26px; font-weight: 900; color: #007bff; text-decoration: none; letter-spacing: 1px; }
-        
-        /* 다국어 선택 드롭다운 */
-        .lang-selector { position: relative; }
-        .lang-btn { background: #1a1a1d; color: #fff; border: 1px solid #444; padding: 8px 15px; cursor: pointer; border-radius: 4px; }
-        .lang-dropdown { display: none; position: absolute; right: 0; background: #1a1a1d; min-width: 150px; border: 1px solid #444; border-radius: 4px; margin-top: 5px; }
-        .lang-dropdown a { color: #ccc; padding: 10px; text-decoration: none; display: block; font-size: 14px; }
-        .lang-dropdown a:hover { background: #333; color: #fff; }
-        .lang-selector:hover .lang-dropdown { display: block; }
+        /* 언어 선택 버튼 스타일 */
+        .lang-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .lang-btn { background: #222; color: #fff; border: 1px solid #444; padding: 5px 10px; cursor: pointer; font-size: 12px; transition: 0.3s; }
+        .lang-btn:hover { background: #007bff; border-color: #007bff; }
 
-        /* 히어로 섹션 */
-        .hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #1c1c21 0%, #0a0a0c 100%); padding-top: 80px; }
-        .hero h1 { font-size: 4rem; margin-bottom: 20px; background: linear-gradient(to right, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.2rem; color: #aaa; max-width: 800px; margin-bottom: 40px; }
+        .hero { padding: 180px 0 100px; text-align: center; background: linear-gradient(to bottom, #111, #050505); }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; }
+        .hero p { font-size: 1.2rem; color: #aaa; max-width: 800px; margin: 0 auto 40px; }
 
-        /* 메인 콘텐츠 섹션 */
-        section { padding: 100px 0; border-bottom: 1px solid #1a1a1d; }
-        h2 { font-size: 2.5rem; text-align: center; margin-bottom: 60px; color: #fff; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        
-        /* 카드 디자인 */
-        .card { background: #151518; padding: 40px; border-radius: 15px; border: 1px solid #222; transition: all 0.3s ease; }
-        .card:hover { border-color: #007bff; transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,123,255,0.1); }
-        .card h3 { color: #007bff; margin-top: 0; font-size: 1.5rem; }
-        .card p { font-size: 15px; color: #bbb; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: #007bff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .card { background: #111; padding: 30px; border-radius: 15px; border: 1px solid #222; }
+        .card h3 { color: #007bff; margin-top: 0; }
 
-        /* 미디어 섹션 */
-        .media-box { background: #000; border-radius: 15px; overflow: hidden; margin-top: 20px; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        /* 미디어 영역 (유튜브/틱톡) */
+        .media-container { background: #000; padding: 20px; border-radius: 15px; border: 1px solid #333; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; margin-bottom: 20px; }
         .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-
-        /* 푸터 */
-        footer { padding: 60px 0; text-align: center; background: #050505; color: #666; }
-        .footer-info { margin-top: 20px; font-size: 13px; }
-
-        /* 모바일 대응 */
-        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } }
+        
+        footer { padding: 60px 0; text-align: center; border-top: 1px solid #222; margin-top: 50px; }
+        .contact-info { color: #007bff; font-weight: bold; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container header-content">
-            <a href="#" class="logo">HK-FIGURE</a>
-            <div class="lang-selector">
-                <button class="lang-btn">🌐 Select Language</button>
-                <div class="lang-dropdown">
-                    <a href="#" onclick="translatePage('ko')">한국어</a>
-                    <a href="#" onclick="translatePage('en')">English</a>
-                    <a href="#" onclick="translatePage('zh')">中文</a>
-                    <a href="#" onclick="translatePage('ar')">العربية</a>
-                    <a href="#" onclick="translatePage('hi')">हिन्दी</a>
-                    <a href="#" onclick="translatePage('ru')">Русский</a>
-                    <a href="#" onclick="translatePage('es')">Español</a>
-                    <a href="#" onclick="translatePage('pt')">Português</a>
-                </div>
+<header>
+    <div class="container header-flex">
+        <a href="#" class="logo">HK-FIGURE</a>
+        <div class="lang-grid">
+            <button class="lang-btn" onclick="setLang('ko')">한국어</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+            <button class="lang-btn" onclick="setLang('zh')">中文</button>
+            <button class="lang-btn" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" onclick="setLang('hi')">हिन्दी</button>
+            <button class="lang-btn" onclick="setLang('ru')">Русский</button>
+            <button class="lang-btn" onclick="setLang('es')">Español</button>
+            <button class="lang-btn" onclick="setLang('pt')">Português</button>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h1 id="h-title">HK-FIGURE: 로봇공학의 혁명</h1>
+        <p id="h-desc">Figure AI 인수를 기반으로 포스코 시너지와 해오름 지치시 설립을 통해 조 단위 글로벌 로봇 생태계를 구축합니다.</p>
+    </div>
+</section>
+
+<div class="container">
+    <h2 class="section-title" id="s-title">Strategic Vision</h2>
+    <div class="grid">
+        <div class="card">
+            <h3 id="c1-t">1. POSCO Synergy</h3>
+            <p id="c1-d">포스코 제철소에 Figure 휴머노이드를 투입, 스마트 팩토리의 정점을 찍습니다. 제조 공정 자동화와 안전 혁신을 주도합니다.</p>
+        </div>
+        <div class="card">
+            <h3 id="c2-t">2. Haeoreum Base</h3>
+            <p id="c2-d">경상권 울산을 중심으로 '해오름 지치시' 제조 및 R&D 거점을 설립하여 글로벌 7대 산업을 견인합니다.</p>
+        </div>
+        <div class="card">
+            <h3 id="c3-t">3. 31.4% APY Yield</h3>
+            <p id="c3-d">7대 실물 산업의 수익을 파이 생태계와 결합하여 지속 가능한 31.4% 복리 수익 모델을 완성합니다.</p>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="media-container">
+            <h3 style="text-align:center">YouTube Global Insight</h3>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/videoseries?list=PL66g1UvY5yH5uO6Ff2w2M4_N6uO84Y1C_" allowfullscreen></iframe>
             </div>
         </div>
-    </header>
-
-    <section class="hero">
-        <div class="container">
-            <h1 id="main-title">HK-FIGURE: The Future of Robotics</h1>
-            <p id="main-desc">휴머노이드 로봇 기술의 정점, Figure AI 인수를 통해 실물 경제와 디지털 자산을 잇는 조 단위 생태계를 구축합니다.</p>
+        <div class="media-container">
+            <h3 style="text-align:center">TikTok Trends</h3>
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@figure" data-unique-id="figure" style="height: 400px;">
+                <section><a target="_blank" href="https://www.tiktok.com/@figure">@figure</a></section>
+            </blockquote>
+            <script async src="https://www.tiktok.com/embed.js"></script>
         </div>
-    </section>
+    </div>
+</div>
 
-    <section id="sectors">
-        <div class="container">
-            <h2 id="sector-title">Strategic Pillars</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3 id="s1-t">1. POSCO & Figure AI Synergy</h3>
-                    <p id="s1-d">포스코의 세계적인 제철 공정에 Figure 03 휴머노이드를 투입하여 완전 자동화 스마트 팩토리를 실현합니다. 제조 데이터 기반의 Helix AI 엔진 고도화를 추진합니다.</p>
-                </div>
-                <div class="card">
-                    <h3 id="s2-t">2. Haeoreum Jichishi Base</h3>
-                    <p id="s2-d">경상권(울산 중심)에 '해오름 지치시' 연구소 및 제조 거점을 설립하여 7대 전략 산업의 글로벌 헤드쿼터 역할을 수행합니다.</p>
-                </div>
-                <div class="card">
-                    <h3 id="s3-t">3. 31.4% APY Infrastructure</h3>
-                    <p id="s3-d">단순 금융 보상이 아닌, 로봇/에너지/항공 등 7대 실물 산업의 수익을 기반으로 한 지속 가능한 31.4% 복리 이자 모델을 제공합니다.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<footer>
+    <div class="container">
+        <p id="f-text">공식 문의 및 파트너십</p>
+        <p class="contact-info">info@hkwb.co.kr</p>
+        <p>&copy; 2026 HK-WorldBank. All rights reserved.</p>
+    </div>
+</footer>
 
-    <section id="media" style="background: #0d0d10;">
-        <div class="container">
-            <h2 id="media-title">Global Vision Media</h2>
-            <div class="grid">
-                <div class="media-box">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/videoseries?list=PL66g1UvY5yH5uO6Ff2w2M4_N6uO84Y1C_" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div class="media-box">
-                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@figure" data-unique-id="figure" style="height: 500px;">
-                        <section><a target="_blank" href="https://www.tiktok.com/@figure">@figure</a></section>
-                    </blockquote>
-                    <script async src="https://www.tiktok.com/embed.js"></script>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+    const i18n = {
+        ko: { hT: "HK-FIGURE: 로봇공학의 혁명", hD: "Figure AI 인수를 통한 조 단위 글로벌 로봇 생태계 구축.", c1t: "1. 포스코 시너지", c1d: "스마트 제철소 구현.", c2t: "2. 해오름 지치시", c2d: "경상권 제조 거점 설립.", c3t: "3. 31.4% 수익", c3d: "실물 기반 복리 모델.", sT: "전략적 비전", fT: "공식 문의" },
+        en: { hT: "HK-FIGURE: Robotics Revolution", hD: "Building a trillion-dollar ecosystem by acquiring Figure AI.", c1t: "1. POSCO Synergy", c1d: "Realizing Smart Steel Plants.", c2t: "2. Haeoreum Base", c2d: "Gyeongsang R&D Hub.", c3t: "3. 31.4% Yield", c3d: "Real-asset backed APY.", sT: "Strategic Vision", fT: "Official Contact" },
+        zh: { hT: "HK-FIGURE: 机器人革命", hD: "通过收购 Figure AI 构建万亿级全球机器人生态系统。", c1t: "1. 浦项制铁协同", c1d: "实现智能钢铁厂。", c2t: "2. 海오름 基地", c2d: "庆尚道研发中心。", c3t: "3. 31.4% 收益", c3d: "实물资产支持的复利。", sT: "战略愿景", fT: "官方联系方式" },
+        ar: { hT: "HK-FIGURE: ثورة الروبوتات", hD: "بناء نظام بيئي عالمي بقيمة تريليون دولار.", c1t: "1. تآزر بوسكو", c1d: "تحقيق مصانع الصلب الذكية.", c2t: "2. قاعدة هاوروم", c2d: "مركز البحث والتطوير.", c3t: "3. 31.4% عائد", c3d: "عائد مركب مدعوم بالأصول.", sT: "الرؤية الاستراتيجية", fT: "الاتصال الرسمي" },
+        hi: { hT: "HK-FIGURE: रोबोटिक्स क्रांति", hD: "Figure AI का अधिग्रहण करके ट्रिलियन-डॉलर का पारिस्थितिकी तंत्र बनाना।", c1t: "1. पॉस्को तालमेल", c1d: "स्मार्ट स्टील प्लांट का निर्माण।", c2t: "2. हेओरम बेस", c2d: "आर एंड डी हब।", c3t: "3. 31.4% लाभ", c3d: "वास्तविक संपत्ति आधारित रिटर्न।", sT: "रणनीतिक विजन", fT: "आधिकारिक संपर्क" },
+        ru: { hT: "HK-FIGURE: Революция робототехники", hD: "Создание триллионной экосистемы через покупку Figure AI.", c1t: "1. Синергия с POSCO", c1d: "Умные заводы.", c2t: "2. База Хэорым", c2d: "НИОКР в Кёнсане.", c3t: "3. 31.4% Доход", c3d: "Сложные проценты.", sT: "Стратегическое видение", fT: "Официальный контакт" },
+        es: { hT: "HK-FIGURE: Revolución Robótica", hD: "Construyendo un ecosistema de un billón de dólares.", c1t: "1. Sinergia POSCO", c1d: "Plantas de acero inteligentes.", c2t: "2. Base Haeoreum", c2d: "Centro de I+D en Gyeongsang.", c3t: "3. 31.4% Rendimiento", c3d: "Interés compuesto real.", sT: "Visión Estratégica", fT: "Contacto Oficial" },
+        pt: { hT: "HK-FIGURE: Revolução Robótica", hD: "Construindo um ecossistema de trilhões de dólares.", c1t: "1. Sinergia POSCO", c1d: "Usinas de aço inteligentes.", c2t: "2. Base Haeoreum", c2d: "Hub de P&D em Gyeongsang.", c3t: "3. 31.4% Rendimento", c3d: "Juros compostos reais.", sT: "Visão Estratégica", fT: "Contato Oficial" }
+    };
 
-    <footer>
-        <div class="container">
-            <div class="logo" style="color: #444; margin-bottom: 20px;">HK-FIGURE</div>
-            <p>Official Contact: <span style="color: #007bff;">contact@hkwb.world</span></p>
-            <div class="footer-info">
-                본 사이트는 HK-WorldBank의 글로벌 로봇 산업 인수 및 금융 생태계 확장을 위한 공식 플랫폼입니다.
-            </div>
-            <p style="margin-top: 30px;">&copy; 2026 HK Group. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-        function translatePage(lang) {
-            const content = {
-                'ko': {
-                    title: 'HK-FIGURE: 로봇공학의 미래',
-                    desc: '휴머노이드 로봇 기술의 정점, Figure AI 인수를 통해 실물 경제와 디지털 자산을 잇는 조 단위 생태계를 구축합니다.',
-                    s1t: '1. 포스코 & Figure AI 시너지',
-                    s1d: '포스코 제철 공정에 휴머노이드를 투입, 세계 최초 AI 기반 스마트 제철소를 구현합니다.',
-                    s2t: '2. 해오름 지치시 거점 설립',
-                    s2d: '울산 등 경상권을 중심으로 7대 산업의 R&D 및 제조 허브를 구축합니다.'
-                },
-                'en': {
-                    title: 'HK-FIGURE: Future of Robotics',
-                    desc: 'Building a trillion-dollar ecosystem by acquiring Figure AI and integrating RWA with digital assets.',
-                    s1t: '1. POSCO & Figure AI Synergy',
-                    s1d: 'Implementing humanoid robots in POSCO steel plants for AI-driven smart manufacturing.',
-                    s2t: '2. Haeoreum Jichishi Base',
-                    s2d: 'Establishing a global R&D and manufacturing hub in Gyeongsang/Ulsan region.'
-                }
-                // 다른 언어 데이터(zh, ar, hi 등)도 이 형식으로 추가하여 확장 가능합니다.
-            };
-
-            if(content[lang]) {
-                document.getElementById('main-title').innerText = content[lang].title;
-                document.getElementById('main-desc').innerText = content[lang].desc;
-                document.getElementById('s1-t').innerText = content[lang].s1t;
-                document.getElementById('s1-d').innerText = content[lang].s1d;
-                document.getElementById('s2-t').innerText = content[lang].s2t;
-                document.getElementById('s2-d').innerText = content[lang].s2d;
-            } else {
-                alert(lang + " language data will be updated soon!");
-            }
-        }
-    </script>
+    function setLang(lang) {
+        const d = i18n[lang];
+        document.getElementById('h-title').innerText = d.hT;
+        document.getElementById('h-desc').innerText = d.hD;
+        document.getElementById('s-title').innerText = d.sT;
+        document.getElementById('c1-t').innerText = d.c1t;
+        document.getElementById('c1-d').innerText = d.c1d;
+        document.getElementById('c2-t').innerText = d.c2t;
+        document.getElementById('c2-d').innerText = d.c2d;
+        document.getElementById('c3-t').innerText = d.c3t;
+        document.getElementById('c3-d').innerText = d.c3d;
+        document.getElementById('f-text').innerText = d.fT;
+    }
+</script>
 </body>
 </html>
