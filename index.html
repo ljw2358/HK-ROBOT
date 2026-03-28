@@ -2,188 +2,165 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HK-FIGURE | CHAIRMAN LEE JAEWAN</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;900&family=Noto+Sans+KR:wght@100;400;900&family=Cinzel:wght@400;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK-FIGURE</title>
     <style>
-        :root {
-            --neon: #00FFFF;
-            --dark: #000000;
-            --card-bg: #080808;
-            --text-gray: #888888;
-            --glow: 0 0 30px rgba(0, 255, 255, 0.5);
-        }
+        /* 기본 스타일 및 테마 */
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #0a0a0c; color: #e0e0e0; line-height: 1.7; }
+        .container { width: 90%; margin: 0 auto; max-width: 1200px; }
+        
+        /* 헤더 & 다국어 네비게이션 */
+        header { background-color: rgba(10, 10, 12, 0.95); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 26px; font-weight: 900; color: #007bff; text-decoration: none; letter-spacing: 1px; }
+        
+        /* 다국어 선택 드롭다운 */
+        .lang-selector { position: relative; }
+        .lang-btn { background: #1a1a1d; color: #fff; border: 1px solid #444; padding: 8px 15px; cursor: pointer; border-radius: 4px; }
+        .lang-dropdown { display: none; position: absolute; right: 0; background: #1a1a1d; min-width: 150px; border: 1px solid #444; border-radius: 4px; margin-top: 5px; }
+        .lang-dropdown a { color: #ccc; padding: 10px; text-decoration: none; display: block; font-size: 14px; }
+        .lang-dropdown a:hover { background: #333; color: #fff; }
+        .lang-selector:hover .lang-dropdown { display: block; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            background: var(--dark); color: #ffffff; 
-            font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; 
-            line-height: 1.8; word-break: keep-all;
-        }
+        /* 히어로 섹션 */
+        .hero { height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; background: radial-gradient(circle at center, #1c1c21 0%, #0a0a0c 100%); padding-top: 80px; }
+        .hero h1 { font-size: 4rem; margin-bottom: 20px; background: linear-gradient(to right, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.2rem; color: #aaa; max-width: 800px; margin-bottom: 40px; }
 
-        /* [핵심 기능 1] 언어 변환 마스터 컨트롤러 */
-        .lang-control-panel {
-            position: fixed; top: 15px; right: 15px; z-index: 10000;
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-            background: rgba(0, 0, 0, 0.95); padding: 12px; border: 1.5px solid var(--neon);
-            border-radius: 8px; backdrop-filter: blur(15px);
-        }
-        .lang-node {
-            background: none; border: 1px solid #333; color: var(--neon);
-            font-size: 11px; font-weight: 900; padding: 10px 15px; cursor: pointer;
-            transition: 0.3s;
-        }
-        .lang-node.active { background: var(--neon); color: black; box-shadow: var(--glow); }
+        /* 메인 콘텐츠 섹션 */
+        section { padding: 100px 0; border-bottom: 1px solid #1a1a1d; }
+        h2 { font-size: 2.5rem; text-align: center; margin-bottom: 60px; color: #fff; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        
+        /* 카드 디자인 */
+        .card { background: #151518; padding: 40px; border-radius: 15px; border: 1px solid #222; transition: all 0.3s ease; }
+        .card:hover { border-color: #007bff; transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,123,255,0.1); }
+        .card h3 { color: #007bff; margin-top: 0; font-size: 1.5rem; }
+        .card p { font-size: 15px; color: #bbb; }
 
-        /* 메인 히어로 섹션 */
-        header { 
-            min-height: 80vh; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; padding: 20px;
-            background: radial-gradient(circle at center, #0a1a1a 0%, #000 80%);
-        }
-        .hero-title { 
-            font-family: 'Cinzel'; font-size: clamp(3rem, 12vw, 8.5rem); 
-            color: var(--neon); text-shadow: var(--glow); letter-spacing: 20px; font-weight: 900;
-        }
-        .hero-sub { 
-            font-size: 1.3rem; color: #444; letter-spacing: 12px; 
-            margin-top: 30px; font-weight: 900; text-transform: uppercase;
-        }
+        /* 미디어 섹션 */
+        .media-box { background: #000; border-radius: 15px; overflow: hidden; margin-top: 20px; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        .container { max-width: 1100px; margin: 0 auto; padding: 80px 20px; }
-        .pillar-card { 
-            background: var(--card-bg); border: 1px solid #111; 
-            margin-bottom: 50px; border-radius: 20px; overflow: hidden;
-            transition: 0.5s; box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-        }
-        .pillar-card:hover { border-color: var(--neon); transform: translateY(-10px); }
+        /* 푸터 */
+        footer { padding: 60px 0; text-align: center; background: #050505; color: #666; }
+        .footer-info { margin-top: 20px; font-size: 13px; }
 
-        summary { 
-            padding: 40px; font-size: clamp(1.4rem, 5vw, 2.4rem); font-weight: 900; 
-            color: #fff; cursor: pointer; list-style: none; display: flex; 
-            justify-content: space-between; align-items: center; background: #050505;
-        }
-        summary::after { content: '\f078'; font-family: 'Font Awesome 6 Free'; color: var(--neon); transition: 0.4s; }
-        details[open] summary::after { transform: rotate(180deg); color: #ff0000; }
-
-        .details-inner { padding: 50px; border-top: 1px solid #111; }
-        .details-inner h3 { 
-            color: var(--neon); font-size: 2.2rem; margin-bottom: 30px; 
-            border-left: 12px solid var(--neon); padding-left: 25px; font-weight: 900;
-        }
-        .details-inner p { font-size: 1.3rem; color: var(--text-gray); text-align: justify; margin-bottom: 30px; }
-
-        /* [핵심 기능 2] 유튜브/틱톡 무조건 작동 하이퍼 링크 */
-        .sns-section { padding: 150px 20px; text-align: center; background: #000; border-top: 2px solid #111; }
-        .gate-btn { 
-            display: inline-block; width: 90%; max-width: 500px; padding: 40px; margin: 25px;
-            text-decoration: none; font-weight: 900; font-size: 2.2rem; border-radius: 20px; 
-            transition: 0.4s; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-        }
-        .yt-btn { background: #FF0000; color: #fff; }
-        .tk-btn { background: #fff; color: #000; }
-        .gate-btn:active { transform: scale(0.95); }
-        .gate-btn i { font-size: 3rem; margin-bottom: 15px; display: block; }
-
-        /* [신규] 공식 이메일 섹션 */
-        .contact-info { margin-top: 100px; padding: 60px; border: 1px dashed var(--neon); display: inline-block; border-radius: 15px; }
-        .contact-info h4 { color: var(--neon); font-size: 1.8rem; margin-bottom: 20px; letter-spacing: 5px; }
-        .contact-info a { color: #fff; text-decoration: none; font-size: 1.6rem; font-weight: 900; transition: 0.3s; }
-        .contact-info a:hover { color: var(--neon); text-shadow: var(--glow); }
-
-        footer { padding: 120px 20px; text-align: center; color: #111; font-family: 'Cinzel'; letter-spacing: 25px; font-size: 1.8rem; font-weight: 900; }
+        /* 모바일 대응 */
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
 
-    <div class="lang-control-panel">
-        <button class="lang-node active" onclick="setMasterLang('ko')">KOREAN</button>
-        <button class="lang-node" onclick="setMasterLang('en')">ENGLISH</button>
-        <button class="lang-node" onclick="setMasterLang('zh')">CHINESE</button>
-    </div>
-
     <header>
-        <div class="hero-title">HK-FIGURE</div>
-        <div class="hero-sub" id="txt-sub">CHAIRMAN LEE JAEWAN</div>
+        <div class="container header-content">
+            <a href="#" class="logo">HK-FIGURE</a>
+            <div class="lang-selector">
+                <button class="lang-btn">🌐 Select Language</button>
+                <div class="lang-dropdown">
+                    <a href="#" onclick="translatePage('ko')">한국어</a>
+                    <a href="#" onclick="translatePage('en')">English</a>
+                    <a href="#" onclick="translatePage('zh')">中文</a>
+                    <a href="#" onclick="translatePage('ar')">العربية</a>
+                    <a href="#" onclick="translatePage('hi')">हिन्दी</a>
+                    <a href="#" onclick="translatePage('ru')">Русский</a>
+                    <a href="#" onclick="translatePage('es')">Español</a>
+                    <a href="#" onclick="translatePage('pt')">Português</a>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="pillar-card">
-            <details open>
-                <summary id="sum-1">01. ROBOTIC GENESIS</summary>
-                <div class="details-inner">
-                    <h3 id="tit-1">포스코 특수강 x Figure AI 혁신</h3>
-                    <p id="desc-1">포스코의 기가스틸(GigaSteel) 공법으로 완성된 초고강도 골격에 Figure AI의 2세대 자율 학습 지능을 이식했습니다. 이는 인류의 노동을 영구히 대체할 불멸의 육체를 의미합니다.</p>
+    <section class="hero">
+        <div class="container">
+            <h1 id="main-title">HK-FIGURE: The Future of Robotics</h1>
+            <p id="main-desc">휴머노이드 로봇 기술의 정점, Figure AI 인수를 통해 실물 경제와 디지털 자산을 잇는 조 단위 생태계를 구축합니다.</p>
+        </div>
+    </section>
+
+    <section id="sectors">
+        <div class="container">
+            <h2 id="sector-title">Strategic Pillars</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3 id="s1-t">1. POSCO & Figure AI Synergy</h3>
+                    <p id="s1-d">포스코의 세계적인 제철 공정에 Figure 03 휴머노이드를 투입하여 완전 자동화 스마트 팩토리를 실현합니다. 제조 데이터 기반의 Helix AI 엔진 고도화를 추진합니다.</p>
                 </div>
-            </details>
-        </div>
-
-        <div class="pillar-card">
-            <details>
-                <summary id="sum-2">02. MASS PRODUCTION</summary>
-                <div class="details-inner">
-                    <h3 id="tit-2">연간 1,000만 대 생산 체제</h3>
-                    <p id="desc-2">울산과 포항의 산업 거점을 통합하여 휴머노이드의 대량 생산을 실현합니다. 2030년까지 전 지구적 공급망을 구축하여 모든 위험 노동으로부터 인류를 해방시킵니다.</p>
+                <div class="card">
+                    <h3 id="s2-t">2. Haeoreum Jichishi Base</h3>
+                    <p id="s2-d">경상권(울산 중심)에 '해오름 지치시' 연구소 및 제조 거점을 설립하여 7대 전략 산업의 글로벌 헤드쿼터 역할을 수행합니다.</p>
                 </div>
-            </details>
-        </div>
-
-        <div class="pillar-card">
-            <details>
-                <summary id="sum-3">03. HAEOREUM CITY</summary>
-                <div class="details-inner">
-                    <h3 id="tit-3">해오름 자치시: 미래의 수도</h3>
-                    <p id="desc-3">울산·포항·경주를 잇는 '해오름 자치시'는 HK-FIGURE의 생산 기지이자 세계 최대의 로봇 산업 벨트입니다. 비전의 전초기지로서 전 세계의 로봇 기술을 선도할 것입니다.</p>
+                <div class="card">
+                    <h3 id="s3-t">3. 31.4% APY Infrastructure</h3>
+                    <p id="s3-d">단순 금융 보상이 아닌, 로봇/에너지/항공 등 7대 실물 산업의 수익을 기반으로 한 지속 가능한 31.4% 복리 이자 모델을 제공합니다.</p>
                 </div>
-            </details>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="sns-section">
-        <h2 style="margin-bottom:60px; letter-spacing:10px; font-family:'Cinzel';">GLOBAL NETWORKS</h2>
-        
-        <a href="https://www.youtube.com/@HK-Holdings" target="_blank" rel="noopener noreferrer" class="gate-btn yt-btn">
-            <i class="fab fa-youtube"></i> OFFICIAL YOUTUBE
-        </a>
-
-        <a href="https://www.tiktok.com/@hkholdings" target="_blank" rel="noopener noreferrer" class="gate-btn tk-btn">
-            <i class="fab fa-tiktok"></i> OFFICIAL TIKTOK
-        </a>
-
-        <div class="contact-info">
-            <h4 id="txt-contact">OFFICIAL CONTACT</h4>
-            <a href="mailto:info@hkholdings.ai.kr">info@hkholdings.ai.kr</a>
+    <section id="media" style="background: #0d0d10;">
+        <div class="container">
+            <h2 id="media-title">Global Vision Media</h2>
+            <div class="grid">
+                <div class="media-box">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/videoseries?list=PL66g1UvY5yH5uO6Ff2w2M4_N6uO84Y1C_" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="media-box">
+                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@figure" data-unique-id="figure" style="height: 500px;">
+                        <section><a target="_blank" href="https://www.tiktok.com/@figure">@figure</a></section>
+                    </blockquote>
+                    <script async src="https://www.tiktok.com/embed.js"></script>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <footer>CHAIRMAN LEE JAEWAN</footer>
+    <footer>
+        <div class="container">
+            <div class="logo" style="color: #444; margin-bottom: 20px;">HK-FIGURE</div>
+            <p>Official Contact: <span style="color: #007bff;">contact@hkwb.world</span></p>
+            <div class="footer-info">
+                본 사이트는 HK-WorldBank의 글로벌 로봇 산업 인수 및 금융 생태계 확장을 위한 공식 플랫폼입니다.
+            </div>
+            <p style="margin-top: 30px;">&copy; 2026 HK Group. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        const M = {
-            ko: { sub:"이재완 의장", s1:"01. 로보틱스 혁신", t1:"포스코 x Figure AI 혁신", d1:"기가스틸과 자율 지능의 결합. 노동의 역사를 바꾸는 혁명입니다.", s2:"02. 대량 양산", t2:"연간 1,000만 대 생산", d2:"울산·포항 인프라를 통한 노동의 해방. 전 지구적 공급망을 가동합니다.", s3:"03. 해오름 자치시", t3:"해오름 자치시 비전", d3:"울산, 포항, 경주를 통합한 세계 최대 로봇 산업 벨트입니다.", con:"공식 문의" },
-            en: { sub:"CHAIRMAN LEE JAEWAN", s1:"01. ROBOTIC GENESIS", t1:"POSCO x Figure AI", d1:"The union of GigaSteel and AI. A revolution in labor history.", s2:"02. MASS PRODUCTION", t2:"10M Units Annually", d2:"Mass production through Ulsan-Pohang infrastructure.", s3:"03. HAEOREUM CITY", t3:"HAEOREUM CITY VISION", d3:"The world's largest robotic belt uniting Ulsan and Pohang.", con:"OFFICIAL CONTACT" },
-            zh: { sub:"主席 李在完", s1:"01. 机器人创新", t1:"浦项制铁 x Figure AI 智能", d1:"特种钢与自主智能的结合。替代劳动的方案。", s2:"02. 大量生产", t2:"年产 1,000 万台", d2:"启动浦项-蔚山工业带，实现全球供应。", s3:"03. 海奥鲁姆自治市", t3:"机器人产业中心", d3:"蔚山、浦项、庆州整合的世界最大机器人大都市。", con:"官方联系" }
-        };
+        function translatePage(lang) {
+            const content = {
+                'ko': {
+                    title: 'HK-FIGURE: 로봇공학의 미래',
+                    desc: '휴머노이드 로봇 기술의 정점, Figure AI 인수를 통해 실물 경제와 디지털 자산을 잇는 조 단위 생태계를 구축합니다.',
+                    s1t: '1. 포스코 & Figure AI 시너지',
+                    s1d: '포스코 제철 공정에 휴머노이드를 투입, 세계 최초 AI 기반 스마트 제철소를 구현합니다.',
+                    s2t: '2. 해오름 지치시 거점 설립',
+                    s2d: '울산 등 경상권을 중심으로 7대 산업의 R&D 및 제조 허브를 구축합니다.'
+                },
+                'en': {
+                    title: 'HK-FIGURE: Future of Robotics',
+                    desc: 'Building a trillion-dollar ecosystem by acquiring Figure AI and integrating RWA with digital assets.',
+                    s1t: '1. POSCO & Figure AI Synergy',
+                    s1d: 'Implementing humanoid robots in POSCO steel plants for AI-driven smart manufacturing.',
+                    s2t: '2. Haeoreum Jichishi Base',
+                    s2d: 'Establishing a global R&D and manufacturing hub in Gyeongsang/Ulsan region.'
+                }
+                // 다른 언어 데이터(zh, ar, hi 등)도 이 형식으로 추가하여 확장 가능합니다.
+            };
 
-        function setMasterLang(lang) {
-            const d = M[lang] || M['en'];
-            document.getElementById('txt-sub').innerText = d.sub;
-            document.getElementById('sum-1').innerText = d.s1;
-            document.getElementById('tit-1').innerText = d.t1;
-            document.getElementById('desc-1').innerText = d.d1;
-            document.getElementById('sum-2').innerText = d.s2;
-            document.getElementById('tit-2').innerText = d.t2;
-            document.getElementById('desc-2').innerText = d.d2;
-            document.getElementById('sum-3').innerText = d.s3;
-            document.getElementById('tit-3').innerText = d.t3;
-            document.getElementById('desc-3').innerText = d.d3;
-            document.getElementById('txt-contact').innerText = d.con;
-
-            document.querySelectorAll('.lang-node').forEach(n => n.classList.remove('active'));
-            event.target.classList.add('active');
+            if(content[lang]) {
+                document.getElementById('main-title').innerText = content[lang].title;
+                document.getElementById('main-desc').innerText = content[lang].desc;
+                document.getElementById('s1-t').innerText = content[lang].s1t;
+                document.getElementById('s1-d').innerText = content[lang].s1d;
+                document.getElementById('s2-t').innerText = content[lang].s2t;
+                document.getElementById('s2-d').innerText = content[lang].s2d;
+            } else {
+                alert(lang + " language data will be updated soon!");
+            }
         }
     </script>
 </body>
