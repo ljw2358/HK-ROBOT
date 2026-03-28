@@ -2,116 +2,232 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK-FIGURE | Global Humanoid Empire</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HK-FIGURE | CHAIRMAN LEE JAEWAN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700;900&family=Noto+Sans+KR:wght@100;300;400;700;900&family=Cinzel:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root { --main-cyan: #00ffcc; --bg-black: #050505; --card-bg: #111111; --robot-silver: #c0c0c0; }
-        body { background-color: var(--bg-black); color: #ffffff; font-family: 'Noto Sans KR', sans-serif; margin: 0; overflow-x: hidden; }
-        .neon-text { font-family: 'Orbitron', sans-serif; color: var(--main-cyan); text-shadow: 0 0 15px rgba(0,255,204,0.6); }
-        
-        /* 언어 선택 바 */
-        .lang-bar { position: sticky; top: 0; background: rgba(5,5,5,0.98); padding: 15px; display: flex; gap: 10px; justify-content: center; z-index: 1000; border-bottom: 2px solid #222; flex-wrap: wrap; }
-        .lang-bar button { background: #1a1a1a; border: 1px solid #333; color: #777; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-size: 0.9rem; transition: 0.3s; font-family: 'Orbitron', sans-serif; }
-        .lang-bar button.active { border-color: var(--main-cyan); color: white; background: #222; box-shadow: 0 0 15px var(--main-cyan); }
+        :root {
+            --neon-blue: #00FFFF;
+            --silver: #C0C0C0;
+            --dark-bg: #000000;
+            --dark-card: #080808;
+            --glow: 0 0 40px rgba(0, 255, 255, 0.5);
+            --gold: #D4AF37;
+        }
 
-        header { padding: 100px 20px; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%); border-bottom: 1px solid #222; }
-        h1 { font-size: 4rem; margin: 0; letter-spacing: 8px; }
-        .vision-sub { font-size: 1.4rem; color: #888; margin-top: 25px; font-weight: 300; letter-spacing: 2px; }
+        /* 기본 설정 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 10px; }
 
-        .main-content { max-width: 1200px; margin: 60px auto; padding: 0 40px; }
-        .intro-text { font-size: 1.2rem; line-height: 2; color: #ddd; text-align: center; margin-bottom: 80px; }
-        
-        /* 핵심 사업 그리드 */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
-        .brand-card { background: var(--card-bg); border: 1px solid #333; border-radius: 25px; padding: 50px; transition: 0.5s; }
-        .brand-card:hover { transform: translateY(-15px); border-color: var(--main-cyan); box-shadow: 0 20px 40px rgba(0,255,204,0.15); }
-        .brand-card h2 { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 25px; color: var(--main-cyan); }
-        .brand-card p { color: #aaa; line-height: 1.8; font-size: 1.05rem; }
+        body {
+            background-color: var(--dark-bg); color: white;
+            font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden;
+            line-height: 2.2; -webkit-font-smoothing: antialiased;
+            word-break: keep-all;
+        }
 
-        /* 하단 소셜 및 이메일 */
-        .social-section { background: #0a0a0a; padding: 100px 10%; text-align: center; border-top: 3px solid var(--main-cyan); margin-top: 100px; }
-        .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 50px; flex-wrap: wrap; }
-        .social-btn { text-decoration: none; color: #000; background: var(--main-cyan); font-family: 'Orbitron', sans-serif; font-weight: bold; padding: 25px 70px; border-radius: 10px; font-size: 1.4rem; transition: 0.3s; }
-        .social-btn:hover { background: #fff; transform: scale(1.05); box-shadow: 0 10px 30px var(--main-cyan); }
-        
-        .email-area { margin-top: 80px; }
-        .email-link { color: var(--main-cyan); text-decoration: none; font-size: 2.5rem; border-bottom: 4px solid var(--main-cyan); font-family: 'Orbitron', sans-serif; transition: 0.3s; }
-        .email-link:hover { color: #fff; border-color: #fff; text-shadow: 0 0 20px #fff; }
+        /* 언어 고정 바 (메탈릭 실버 스타일) */
+        .lang-fixed-bar {
+            position: fixed; top: 20px; right: 20px; z-index: 9999;
+            width: 200px; background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--silver); border-radius: 4px;
+            padding: 10px; backdrop-filter: blur(15px);
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.2);
+        }
+        .lang-fixed-bar span {
+            font-size: 0.6rem; color: var(--silver); font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
 
-        footer { padding: 80px; text-align: center; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; color: #333; }
+        /* 메인 히어로 - 로봇 전용 시각화 */
+        header {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            position: relative;
+        }
+        .hero-title {
+            font-family: 'Cinzel', serif; font-size: clamp(3rem, 15vw, 10rem);
+            color: var(--neon-blue); letter-spacing: 20px; text-shadow: var(--glow);
+            font-weight: 900; margin-bottom: 30px; animation: fadeIn 2s;
+        }
+        .hero-sub {
+            font-family: 'Montserrat'; font-size: 1.1rem; color: #444;
+            letter-spacing: 12px; font-weight: 300; text-transform: uppercase;
+        }
+        .hero-motto { font-size: clamp(1rem, 3.5vw, 2.2rem); color: white; font-weight: 700; margin-top: 60px; letter-spacing: 5px; }
+
+        /* 핵심 비전 (7대 분야 로봇 전문화) */
+        .manifesto-section { max-width: 1400px; margin: 150px auto; padding: 0 30px; }
+        .section-header { text-align: center; margin-bottom: 150px; }
+        .section-header h2 { font-family: 'Cinzel'; font-size: 4.5rem; color: var(--silver); margin-bottom: 25px; }
+        .section-header .bar { width: 150px; height: 5px; background: var(--neon-blue); margin: 0 auto; box-shadow: var(--glow); }
+
+        .robot-pillar {
+            background: var(--dark-card); border: 1px solid #1a1a1a;
+            margin-bottom: 80px; border-radius: 8px; transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .robot-pillar:hover { border-color: var(--neon-blue); transform: translateY(-10px); box-shadow: var(--glow); }
+
+        summary {
+            padding: 65px; font-family: 'Montserrat'; font-size: clamp(1.8rem, 5vw, 3.2rem);
+            font-weight: 900; color: var(--silver); cursor: pointer; list-style: none;
+            display: flex; justify-content: space-between; align-items: center;
+            letter-spacing: 8px;
+        }
+        summary::after { content: "\f067"; font-family: "Font Awesome 6 Free"; font-size: 2.5rem; color: #333; transition: 0.4s; }
+        details[open] summary::after { transform: rotate(45deg); color: var(--neon-blue); }
+
+        .content-box {
+            padding: 0 65px 120px; border-top: 1px solid #222; animation: slideUp 0.8s;
+        }
+        .content-box h3 {
+            font-size: 2.5rem; color: white; margin: 90px 0 50px;
+            font-weight: 900; border-left: 12px solid var(--neon-blue); padding-left: 35px;
+            letter-spacing: 3px;
+        }
+        .content-box p { font-size: 1.4rem; color: #aaa; margin-bottom: 60px; line-height: 2.5; }
+
+        /* 기술 명세 그리드 */
+        .tech-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 50px; margin-top: 80px;
+        }
+        .tech-card {
+            background: #000; border: 1px solid #1a1a1a; padding: 50px;
+            border-bottom: 6px solid var(--neon-blue);
+        }
+        .tech-card h5 { color: var(--neon-blue); font-size: 1.8rem; margin-bottom: 30px; font-weight: 800; }
+        .tech-card ul { list-style: none; color: #888; font-size: 1.2rem; }
+        .tech-card li { margin-bottom: 20px; position: relative; padding-left: 25px; }
+        .tech-card li::before { content: "»"; position: absolute; left: 0; color: var(--neon-blue); }
+
+        /* 푸터 및 SNS (유튜브/틱톡 똑바로 연동) */
+        footer {
+            padding: 250px 30px 120px; text-align: center; background: #000;
+            border-top: 1px solid #1a1a1a;
+        }
+        .sns-links { display: flex; justify-content: center; gap: clamp(60px, 18vw, 180px); margin-bottom: 180px; }
+        .sns-links a {
+            color: white; text-decoration: none; display: flex; flex-direction: column;
+            align-items: center; gap: 35px; transition: 0.5s;
+        }
+        .sns-links i { font-size: 7rem; transition: 0.4s; }
+        .sns-links a:hover { color: var(--neon-blue); transform: translateY(-25px) scale(1.1); }
+        .sns-links span { font-weight: 900; letter-spacing: 7px; font-size: 1.4rem; font-family: 'Montserrat'; }
+
+        .chairman-signature { font-family: 'Cinzel'; font-size: 2.2rem; color: #1a1a1a; letter-spacing: 25px; font-weight: 900; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 768px) {
+            .hero-title { letter-spacing: 12px; }
+            .sns-links { flex-direction: column; gap: 100px; }
+            summary { padding: 45px 25px; }
+            .content-box { padding: 0 30px 80px; }
+            .lang-fixed-bar { width: 180px; top: 10px; right: 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="lang-bar">
-        <button onclick="changeLang('ko', this)" class="active">KOREAN</button>
-        <button onclick="changeLang('en', this)">ENGLISH</button>
-        <button onclick="changeLang('zh', this)">CHINESE</button>
-        <button onclick="changeLang('ar', this)">ARABIC</button>
-        <button onclick="changeLang('jp', this)">JAPANESE</button>
-        <button onclick="changeLang('es', this)">SPANISH</button>
+    <div class="lang-fixed-bar">
+        <span>KOREAN</span><span>ENGLISH</span><span>CHINESE</span><span>ARABIC</span><span>JAPANESE</span><span>SPANISH</span>
     </div>
 
     <header>
-        <h1 class="neon-text">HK-FIGURE</h1>
-        <p id="vision-tag" class="vision-sub">"로봇으로 인류를 구원하다"</p>
+        <div class="hero-title">HK-FIGURE</div>
+        <div class="hero-sub">CHAIRMAN LEE JAEWAN</div>
+        <div class="hero-motto">"로봇으로 인류를 구원하다"</div>
     </header>
 
-    <div class="main-content">
-        <div id="intro" class="intro-text">
-            HK-FIGURE는 포스코의 초정밀 특수강 기술과 HK 그룹의 독자적인 AI를 결합하여, 인간의 한계를 뛰어넘는 휴머노이드 솔루션을 전 세계에 공급합니다.
+    <div class="manifesto-section">
+        <div class="section-header">
+            <h2>HUMANOID ROBOTICS ONLY</h2>
+            <div class="bar"></div>
         </div>
 
-        <div class="grid-container">
-            <div class="brand-card">
-                <h2 id="t1">ROBOTICS</h2>
-                <p id="d1">포스코(POSCO) 협력을 통한 고강도 프레임 및 초정밀 휴머노이드 하드웨어 제작. 인간의 노동을 완전히 대체할 지능형 플랫폼입니다.</p>
-            </div>
-            <div class="brand-card">
-                <h2 id="t2">PARTS BANK</h2>
-                <p id="d2">전 세계 로봇 핵심 부품의 표준을 제시하는 글로벌 공급 허브. 전용 부품 뱅크를 통해 완벽한 유지보수 시스템을 제공합니다.</p>
-            </div>
-            <div class="brand-card">
-                <h2 id="t3">HK-PHONE</h2>
-                <p id="d3">양자 보안 기술이 적용된 차세대 통신 기기. HK-FIGURE 로봇의 실시간 제어와 보안 통신을 위한 최적의 인터페이스입니다.</p>
-            </div>
+        <div class="robot-pillar">
+            <details>
+                <summary>01. THE COLLABORATION</summary>
+                <div class="content-box">
+                    <h3>Figure AI의 인텔리전스 x 포스코의 하드웨어</h3>
+                    <p>HK-FIGURE는 Figure AI의 압도적인 자율 인지 시스템과 포스코의 세계 최고 수준 특수강 제조 기술의 '환상적인 콜라보레이션'을 통해 인류 문명의 새로운 육체를 창조합니다. 이는 단순한 제휴를 넘어선, 육체와 영혼의 완전한 결합입니다.</p>
+                    <div class="tech-grid">
+                        <div class="tech-card">
+                            <h5>Posco Special-Grade Steel</h5>
+                            <ul>
+                                <li>극강의 강도와 경량화를 달성한 'HK-P steel' 적용</li>
+                                <li>충격 흡수 및 미세 동작 정밀도 극대화</li>
+                                <li>글로벌 성간 물류망(Space)과 연동된 부품 자급 시스템</li>
+                            </ul>
+                        </div>
+                        <div class="tech-card">
+                            <h5>Figure AI Core</h5>
+                            <ul>
+                                <li>Figure 01의 멀티모달 AI를 통한 전 지구적 인지</li>
+                                <li>포스코 로봇 공장 내 완전 자율 생산 라인 통제</li>
+                                <li>HK WorldBank와 연동된 로봇 서비스 전용 금융 모듈 탑재</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </details>
         </div>
+
+        <div class="robot-pillar">
+            <details>
+                <summary>02. THE REVOLUTION</summary>
+                <div class="content-box">
+                    <h3>100% 노동 해방: Figure 01 대량 양산</h3>
+                    <p>인간을 단순하고 위험한 노동으로부터 완전히 해방시키는 것은 HK-FIGURE의 최우선 사명입니다. 포스코의 포항/울산 공장을 거점으로 Figure 01 기반의 휴머노이드 로봇을 '연간 1,000만 대 규모'로 대량 양산하여, 전 세계 산업 현장의 노동 구조를 재편합니다.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="robot-pillar">
+            <details>
+                <summary>03. THE FRONTIER</summary>
+                <div class="content-box">
+                    <h3>심우주 험지 전용: Figure-S 인프라 로봇</h3>
+                    <p>지구를 넘어 화성 테라포밍과 우주 정거장 건설을 위해서는 인간이 감당할 수 없는 환경에서의 작업이 필수적입니다. HK-FIGURE는 포스코의 고강도 내열 특수강을 적용하여 극저온, 고방사능 환경에서도 Figure AI의 지능을 완벽히 수행하는 심우주 전용 'Figure-S' 라인업을 구축합니다.</p>
+                </div>
+            </details>
+        </div>
+
+        <div class="robot-pillar">
+            <details>
+                <summary>04. THE SECURITY</summary>
+                <div class="content-box">
+                    <h3>해킹 불가능: Quantum-Secure Figure-Q</h3>
+                    <p>로봇이 사회 인프라가 될 때, 보안은 생명과 직결됩니다. HK-FIGURE는 전용 양자 암호 모듈을 탑재하여, Figure AI의 데이터 전송과 제어 시스템을 외부 해킹 시도로부터 완벽하게 보호하는 'Figure-Q' 모델을 공급합니다. 이는 HK-PHONE의 양자 보안 기술과 실시간으로 연동됩니다.</p>
+                </div>
+            </details>
+        </div>
+
     </div>
 
-    <section class="social-section">
-        <h2 class="neon-text" style="font-size: 3rem; margin-bottom: 50px;">GLOBAL CHANNELS</h2>
-        <div class="social-links">
-            <a href="https://www.youtube.com/@Hyekong2025" target="_blank" class="social-btn">YOUTUBE</a>
-            <a href="https://www.tiktok.com/@hyekong2025" target="_blank" class="social-btn">TIKTOK</a>
+    <footer>
+        <div class="sns-links">
+            <a href="https://youtube.com/@HK-Holdings" target="_blank">
+                <i class="fab fa-youtube" style="color:#FF0000;"></i>
+                <span>YOUTUBE</span>
+            </a>
+            <a href="https://tiktok.com/@hkholdings" target="_blank">
+                <i class="fab fa-tiktok"></i>
+                <span>TIKTOK</span>
+            </a>
         </div>
-        <div class="email-area">
-            <a href="mailto:info@hkfigure.com" class="email-link">info@hkfigure.com</a>
-        </div>
-    </section>
+        <div class="chairman-signature">CHAIRMAN: LEE JAEWAN</div>
+        <p style="color: #111; margin-top: 50px; font-weight: 900; letter-spacing: 5px;">HWA-I-TING! HK GROUP GLOBAL HQ.</p>
+    </footer>
 
-    <footer>© 2026 HK-FIGURE | HK GROUP ROBOTICS DIVISION</footer>
-
-    <script>
-        const content = {
-            ko: { tag: "로봇으로 인류를 구원하다", intro: "HK-FIGURE는 포스코의 특수강 기술과 HK AI를 결합하여 인간의 육체 노동을 대체할 세계 최고의 휴머노이드 로봇을 제작합니다.", t: ["ROBOTICS", "PARTS BANK", "HK-PHONE"], d: ["포스코 기반 초정밀 휴머노이드 제작", "글로벌 부품 공급 및 정비 허브", "양자 보안 기반 로봇 제어 시스템"] },
-            en: { tag: "Saving Humanity through Robotics", intro: "HK-FIGURE combines POSCO's steel technology with HK AI to create world-class humanoid robots.", t: ["ROBOTICS", "PARTS BANK", "HK-PHONE"], d: ["Precision humanoid manufacturing", "Global parts supply hub", "Quantum robot control system"] },
-            zh: { tag: "用机器人拯救人类", intro: "HK-FIGURE 将浦项制铁的钢铁技术与 HK AI 相结合，制造出世界级的人形机器人。", t: ["机器人技术", "零件银行", "HK手机"], d: ["基于浦项制铁技术的机器人制造", "全球零件供应与维护中心", "量子安全实时控制系统"] },
-            ar: { tag: "إنقاذ البشرية من خلال الروبوتات", intro: "تجمع HK-FIGURE بين تكنولوجيا POSCO و HK AI لإنشاء روبوتات بشرية عالمية المستوى.", t: ["الروبوتات", "بنك قطع الغيار", "هاتف HK"], d: ["صناعة الروبوتات باستخدام فولاذ POSCO", "المركز العالمي لتوريد قطع الغيار", "نظام التحكم في الروبوتات بتشفير كمي"] },
-            jp: { tag: "ロボットで人類を救う", intro: "HK-FIGUREはPOSCOの鋼鉄技術とHK AIを融合させ、次世代のロボット帝国を築きます。", t: ["ロボティクス", "パーツバンク", "HKフォン"], d: ["POSCO特殊鋼を用いた精密ロボット製作", "世界的な部品供給および保守ハブ", "量子セキュリティによる制御システム"] },
-            es: { tag: "Salvando a la humanidad con robótica", intro: "HK-FIGURE combina la tecnología de POSCO con HK AI para crear robots humanoides de clase mundial.", t: ["ROBÓTICA", "PARTS BANK", "HK-PHONE"], d: ["Fabricación de robots con acero especial POSCO", "Centro global de componentes y mantenimiento", "Control de robots con seguridad cuántica"] }
-        };
-
-        function changeLang(lang, btn) {
-            document.getElementById('vision-tag').innerText = content[lang].tag;
-            document.getElementById('intro').innerText = content[lang].intro;
-            for(let i=1; i<=3; i++){
-                document.getElementById(`t${i}`).innerText = content[lang].t[i-1];
-                document.getElementById(`d${i}`).innerText = content[lang].d[i-1];
-            }
-            document.querySelectorAll('.lang-bar button').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
-    </script>
 </body>
 </html>
