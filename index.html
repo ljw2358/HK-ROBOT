@@ -3,53 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HK-ROBOT | The Future of AI</title>
+    <title>HK-ROBOT</title>
     <style>
-        /* 프리미엄 다크 테마 */
-        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #050505; color: #ffffff; line-height: 1.7; }
+        /* 프리미엄 다크 모드 스타일 */
+        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #000; color: #fff; line-height: 1.8; overflow-x: hidden; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
         
-        /* 헤더 가독성 강화 */
-        header { background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #1a1a1a; }
+        /* 상단 네비게이션 */
+        header { background: rgba(0,0,0,0.95); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #222; }
         .header-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: 900; color: #007bff; text-decoration: none; letter-spacing: -1px; }
+        .logo { font-size: 24px; font-weight: 900; color: #007bff; text-decoration: none; }
         
-        /* 언어 선택기 */
+        /* 언어 선택 (모바일 최적화) */
         .lang-selector { position: relative; }
-        .lang-btn { background: #111; color: #fff; border: 1px solid #007bff; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-size: 12px; font-weight: bold; }
-        .lang-dropdown { display: none; position: absolute; right: 0; background: #111; min-width: 150px; border: 1px solid #333; border-radius: 5px; margin-top: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .lang-dropdown a { color: #aaa; padding: 12px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #222; }
+        .lang-btn { background: #111; color: #fff; border: 1.5px solid #007bff; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-size: 13px; font-weight: bold; }
+        .lang-dropdown { display: none; position: absolute; right: 0; background: #111; min-width: 140px; border: 1px solid #333; border-radius: 5px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .lang-dropdown a { color: #ccc; padding: 12px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #222; }
         .lang-dropdown a:hover { background: #007bff; color: #fff; }
         .lang-selector:hover .lang-dropdown { display: block; }
 
-        /* 히어로 섹션 볼륨감 강화 */
-        .hero { min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 150px 0 80px; background: linear-gradient(to bottom, #000 0%, #050505 100%); }
-        .hero h1 { font-size: 3rem; margin-bottom: 25px; font-weight: 900; background: linear-gradient(45deg, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
-        .hero p { font-size: 1.2rem; color: #888; max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        /* 히어로 섹션 (웅장한 느낌) */
+        .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 80px; background: radial-gradient(circle at center, #111 0%, #000 100%); }
+        .hero-content h1 { font-size: 3.5rem; margin-bottom: 20px; font-weight: 900; background: linear-gradient(45deg, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { font-size: 1.3rem; color: #999; max-width: 800px; margin: 0 auto; }
 
-        /* 비전 카드 (내용 대폭 보강) */
-        .section-title { text-align: center; font-size: 2rem; margin: 80px 0 40px; color: #007bff; font-weight: 800; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 80px; }
-        .card { background: #0a0a0a; padding: 40px; border-radius: 20px; border: 1px solid #1a1a1a; transition: 0.3s; }
-        .card:hover { border-color: #007bff; transform: translateY(-10px); }
-        .card h3 { color: #fff; font-size: 1.6rem; margin-top: 0; margin-bottom: 20px; }
-        .card p { font-size: 1rem; color: #777; }
+        /* 핵심 비전 섹션 (내용 보강) */
+        .vision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 80px 0; }
+        .vision-card { background: #0a0a0a; padding: 45px; border-radius: 20px; border: 1px solid #222; transition: 0.4s; }
+        .vision-card:hover { border-color: #007bff; transform: translateY(-10px); }
+        .vision-card h3 { color: #007bff; font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; }
+        .vision-card p { font-size: 1.1rem; color: #888; margin: 0; }
 
-        /* 미디어 섹션 (영상 크기 최적화) */
-        .media-container { background: #000; padding: 60px 0; border-radius: 30px; margin-bottom: 100px; }
-        .media-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
-        @media (min-width: 992px) { .media-grid { grid-template-columns: 1.5fr 1fr; } }
-
-        .video-box { background: #0a0a0a; padding: 20px; border-radius: 20px; border: 1px solid #222; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-        
-        .tiktok-box { display: flex; justify-content: center; background: #0a0a0a; padding: 20px; border-radius: 20px; border: 1px solid #222; }
-        .tiktok-wrapper { width: 100%; max-width: 325px; min-height: 600px; }
-
-        footer { padding: 80px 0; text-align: center; background: #000; border-top: 1px solid #1a1a1a; }
-        .contact-info { color: #007bff; font-weight: bold; font-size: 1.5rem; text-decoration: none; display: block; margin-bottom: 20px; }
-        .copyright { color: #333; font-size: 14px; }
+        /* 하단 컨택트 */
+        footer { padding: 100px 0 50px; text-align: center; background: #000; border-top: 1px solid #111; }
+        .contact-box { margin-bottom: 30px; }
+        .contact-email { color: #007bff; font-size: 2rem; font-weight: 900; text-decoration: none; }
+        .copyright { color: #333; margin-top: 40px; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -58,86 +47,85 @@
     <div class="container header-flex">
         <a href="#" class="logo">HK-ROBOT</a>
         <div class="lang-selector">
-            <button class="lang-btn" id="cur-lang">🌐 Select Language</button>
+            <button class="lang-btn" id="lang-btn-text">🌐 Language (언어)</button>
             <div class="lang-dropdown">
-                <a href="#" onclick="setLang('ko', '한국어')">한국어</a>
-                <a href="#" onclick="setLang('en', 'English')">English</a>
-                <a href="#" onclick="setLang('zh', '中文')">中文</a>
-                <a href="#" onclick="setLang('ar', 'العربية')">العربية</a>
-                <a href="#" onclick="setLang('hi', 'हिन्दी')">हिन्दी</a>
-                <a href="#" onclick="setLang('ru', 'Русский')">Русский</a>
-                <a href="#" onclick="setLang('ja', '日本語')">日本語</a>
+                <a href="javascript:void(0)" onclick="setLang('ko', '한국어')">한국어</a>
+                <a href="javascript:void(0)" onclick="setLang('en', 'English')">English</a>
+                <a href="javascript:void(0)" onclick="setLang('zh', '中文')">中文</a>
+                <a href="javascript:void(0)" onclick="setLang('ar', 'العربية')">العربية</a>
+                <a href="javascript:void(0)" onclick="setLang('hi', 'हिन्दी')">हिन्दी</a>
+                <a href="javascript:void(0)" onclick="setLang('es', 'Español')">Español</a>
+                <a href="javascript:void(0)" onclick="setLang('pt', 'Português')">Português</a>
+                <a href="javascript:void(0)" onclick="setLang('uk', 'Українська')">Українська</a>
+                <a href="javascript:void(0)" onclick="setLang('ja', '日本語')">日本語</a>
+                <a href="javascript:void(0)" onclick="setLang('ru', 'Русский')">Русский</a>
             </div>
         </div>
     </div>
 </header>
 
 <section class="hero">
-    <div class="container">
-        <h1 id="h-title">HK-ROBOT: 로봇공학의 새로운 주인</h1>
-        <p id="h-desc">우리는 80조 원을 들여 하드웨어를 사지 않습니다. 차세대 로봇의 뇌(OS)인 OpenMind를 장악하여, 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다.</p>
+    <div class="container hero-content">
+        <h1 id="txt-h1">HK-ROBOT:<br>로봇공학의 혁명</h1>
+        <p id="txt-p1">우리는 80조 원을 들여 하드웨어를 사지 않습니다. 차세대 로봇의 뇌(OS)인 OpenMind를 장악하여, 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다.</p>
     </div>
 </section>
 
-<div class="container">
-    <h2 class="section-title">Strategic Vision</h2>
-    <div class="grid">
-        <div class="card">
-            <h3>1. OpenMind Intelligence</h3>
-            <p>Figure AI 인수를 넘어, 전 세계 모든 로봇이 우리 OS를 써야만 움직이게 만드는 '로봇판 안드로이드' 생태계를 구축합니다.</p>
+<section class="container">
+    <div class="vision-grid">
+        <div class="vision-card">
+            <h3 id="txt-v1-t">1. 지능 독점</h3>
+            <p id="txt-v1-d">전 세계 모든 휴머노이드가 우리 OS를 써야만 움직이게 만드는 '로봇판 안드로이드' 생태계를 완성합니다.</p>
         </div>
-        <div class="card">
-            <h3>2. POSCO Smart Synergy</h3>
-            <p>포스코 제철 공정을 세계 최초의 휴머노이드 전용 스마트 팩토리로 전환하여, 제조 공정 데이터와 하드웨어 주도권을 동시에 확보합니다.</p>
+        <div class="vision-card">
+            <h3 id="txt-v2-t">2. 제조 혁명</h3>
+            <p id="txt-v2-d">포스코 공정을 세계 최초의 휴머노이드 전용 스마트 제철소로 전환하여 압도적 생산 데이터를 확보합니다.</p>
         </div>
-        <div class="card">
-            <h3>3. Haeoreum Global HQ</h3>
-            <p>울산을 중심으로 '해오름 지치시' 제조 및 R&D 거점을 설립하여, 글로벌 로봇의 AS와 지능 업그레이드를 총괄하는 본부 역할을 수행합니다.</p>
-        </div>
-    </div>
-
-    <div class="media-container">
-        <div class="media-grid">
-            <div class="video-box">
-                <h4 style="text-align: center; margin-bottom: 20px;">YouTube Global insight</h4>
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/7XpL9_R_rVE?si=HK-ROBOT-VISION" title="HK-ROBOT YouTube" allowfullscreen></iframe>
-                </div>
-            </div>
-            <div class="tiktok-box">
-                <div class="tiktok-wrapper">
-                    <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@figure" data-unique-id="figure" data-embed-from="embed_page" style="width: 100%;">
-                        <section><a target="_blank" href="https://www.tiktok.com/@figure?refer=embed">@figure</a></section>
-                    </blockquote>
-                    <script async src="https://www.tiktok.com/embed.js"></script>
-                </div>
-            </div>
+        <div class="vision-card">
+            <h3 id="txt-v3-t">3. 글로벌 거점</h3>
+            <p id="txt-v3-d">해오름 지치시를 본부로 삼아, 전 세계 로봇의 AS 및 지능 업데이트를 실시간으로 통제합니다.</p>
         </div>
     </div>
-</div>
+</section>
 
 <footer>
     <div class="container">
-        <a href="mailto:info@hkwb.co.kr" class="contact-info">info@hkwb.co.kr</a>
+        <div class="contact-box">
+            <p style="color:#555; margin-bottom: 10px;">Contact Us</p>
+            <a href="mailto:info@hkwb.co.kr" class="contact-email">info@hkwb.co.kr</a>
+        </div>
         <p class="copyright">&copy; 2026 HK Group. All rights reserved.</p>
     </div>
 </footer>
 
 <script>
-    const data = {
-        ko: { hT: "HK-ROBOT: 로봇공학의 새로운 주인", hD: "우리는 80조 원을 들여 하드웨어를 사지 않습니다. 차세대 로봇의 뇌(OS)인 OpenMind를 장악하여, 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다." },
-        en: { hT: "HK-ROBOT: New Master of Robotics", hD: "We do not buy hardware for 80 trillion won. We seize OpenMind, the brain (OS) of next-gen robots, to implant Pi's soul worldwide." },
-        zh: { hT: "HK-ROBOT: 机器人学的新主人", hD: "我们不花80万亿韩元买硬件。我们将掌握次世代机器人的大脑(OS) OpenMind，将Pi的灵魂植入全世界的机器人中。" }
-        /* 형님, 다른 언어도 이 형식으로 추가하면 됩니다! */
+    // 10개 언어 데이터 완벽 세팅
+    const translations = {
+        'ko': { h1: "HK-ROBOT:<br>로봇공학의 혁명", p1: "차세대 로봇의 뇌(OS)인 OpenMind를 장악하여 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다.", v1t: "1. 지능 독점", v1d: "로봇판 안드로이드 생태계 완성.", v2t: "2. 제조 혁명", v2d: "스마트 제철소로 데이터 확보.", v3t: "3. 글로벌 거점", v3d: "해오름 본부에서 전 세계 통제." },
+        'en': { h1: "HK-ROBOT:<br>Robotics Revolution", p1: "We seize OpenMind, the brain (OS) of next-gen robots, to implant Pi's soul worldwide.", v1t: "1. Intelligence Monopoly", v1d: "Completing the Robot Android Ecosystem.", v2t: "2. Manufacturing Revolution", v2d: "Securing data with Smart Factories.", v3t: "3. Global Hub", v3d: "Global control from Haeoreum HQ." },
+        'zh': { h1: "HK-ROBOT:<br>机器人革命", p1: "掌握 OpenMind，将 Pi 的灵魂植入全球机器人。", v1t: "1. 智能垄断", v1d: "完成机器人版安卓生态系统。", v2t: "2. 制造革命", v2d: "通过智能工厂获取数据。", v3t: "3. 全球据点", v3d: "通过海오름总部控制全球。" },
+        'ar': { h1: "HK-ROBOT:<br>ثورة الروبوتات", p1: "نزرع روح Pi في الروبوتات من خلال السيطرة على OpenMind.", v1t: "1. احتكار الذكاء", v1d: "إكمال نظام أندرويد للروبوتات.", v2t: "2. ثورة التصنيع", v2d: "تأمين البيانات بالمصانع الذكية.", v3t: "3. المركز العالمي", v3d: "التحكم العالمي من المقر." },
+        'hi': { h1: "HK-ROBOT:<br>रोबोटिक्स क्रांति", p1: "OpenMind को नियंत्रित करके दुनिया भर के रोबोटों में Pi की आत्मा का रोपण।", v1t: "1. खुफिया एकाधिकार", v1d: "रोबोट एंड्रॉइड इकोसिस्टम।", v2t: "2. निर्माण क्रांति", v2d: "स्मार्ट कारखानों से डेटा सुरक्षित करना।", v3t: "3. ग्लोबल हब", v3d: "मुख्यालय से वैश्विक नियंत्रण।" },
+        'es': { h1: "HK-ROBOT:<br>Revolución Robótica", p1: "Implantamos el alma de Pi en robots dominando OpenMind.", v1t: "1. Monopolio de Inteligencia", v1d: "Ecosistema Android para robots.", v2t: "2. Revolución Industrial", v2d: "Datos con fábricas inteligentes.", v3t: "3. Hub Global", v3d: "Control global desde la sede." },
+        'pt': { h1: "HK-ROBOT:<br>Revolução Robótica", p1: "Implantamos a alma de Pi em robôs dominando o OpenMind.", v1t: "1. Monopólio de Inteligência", v1d: "Ecossistema Android para robôs.", v2t: "2. Revolução Industrial", v2d: "Dados com fábricas inteligentes.", v3t: "3. Hub Global", v3d: "Controle global pela sede." },
+        'uk': { h1: "HK-ROBOT:<br>Революція робототехніки", hD: "Вживляємо душу Pi в роботів через OpenMind.", v1t: "1. Монополія інтелекту", v1d: "Екосистема Android для роботів.", v2t: "2. Виробнича революція", v2d: "Дані з розумних заводів.", v3t: "3. Глобальний центр", v3d: "Глобальний контроль зі штабу." },
+        'ja': { h1: "HK-ROBOT:<br>ロボティクス革命", p1: "OpenMindを掌握し、全世界のロボットにPiの魂を植え付けます。", v1t: "1. 知能独占", v1d: "ロボット版Android。 ", v2t: "2. 製造革命", v2d: "スマート製鉄所。 ", v3t: "3. グローバル拠点", v3d: "海おるむ本部。 " },
+        'ru': { h1: "HK-ROBOT:<br>Революция робототехники", p1: "Вживляем душу Pi в роботов через OpenMind.", v1t: "1. Монополия интеллекта", v1d: "Android для роботов.", v2t: "2. Производство", v2d: "Данные с умных заводов.", v3t: "3. Глобальный хаб", v3d: "Глобальный контроль." }
     };
 
     function setLang(lang, name) {
-        const l = data[lang];
+        const l = translations[lang];
         if(l) {
-            document.getElementById('h-title').innerText = l.hT;
-            document.getElementById('h-desc').innerText = l.hD;
+            document.getElementById('txt-h1').innerHTML = l.h1;
+            document.getElementById('txt-p1').innerText = l.p1;
+            document.getElementById('txt-v1-t').innerText = l.v1t;
+            document.getElementById('txt-v1-d').innerText = l.v1d;
+            document.getElementById('txt-v2-t').innerText = l.v2t;
+            document.getElementById('txt-v2-d').innerText = l.v2d;
+            document.getElementById('txt-v3-t').innerText = l.v3t;
+            document.getElementById('txt-v3-d').innerText = l.v3d;
+            document.getElementById('lang-btn-text').innerText = "🌐 " + name;
         }
-        document.getElementById('cur-lang').innerText = "🌐 " + name;
     }
 </script>
 </body>
