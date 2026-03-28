@@ -4,125 +4,195 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HK-FIGURE | CHAIRMAN LEE JAEWAN</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;900&family=Noto+Sans+KR:wght@100;900&family=Cinzel:wght@900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;900&family=Noto+Sans+KR:wght@100;400;900&family=Cinzel:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root { --neon: #00FFFF; --bg: #000; --card: #0a0a0a; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; }
-
-        /* [언어바] 형님, 일본어까지 포함 6개국어입니다 */
-        .lang-bar { position: fixed; top: 10px; right: 10px; z-index: 1000; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-        .lang-btn { background: rgba(0,0,0,0.8); border: 1px solid var(--neon); color: var(--neon); padding: 5px 10px; font-size: 10px; font-weight: 900; cursor: pointer; }
-        .lang-btn.active { background: var(--neon); color: #000; }
-
-        header { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero-title { font-family: 'Cinzel'; font-size: 4rem; color: var(--neon); text-shadow: 0 0 20px var(--neon); letter-spacing: 10px; }
-        .hero-sub { font-size: 1.2rem; letter-spacing: 5px; color: #444; margin-top: 10px; }
-
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .pillar { background: var(--card); border: 1px solid #1a1a1a; margin-bottom: 30px; border-radius: 15px; overflow: hidden; }
-        summary { padding: 30px; font-size: 1.5rem; font-weight: 900; color: var(--neon); cursor: pointer; border-bottom: 1px solid #1a1a1a; }
-        .details-content { padding: 30px; line-height: 1.8; color: #aaa; }
-        .details-content h3 { color: #fff; margin-bottom: 15px; font-size: 1.8rem; border-left: 5px solid var(--neon); padding-left: 15px; }
-
-        /* [유튜브/틱톡 버튼] 형님, 이 버튼은 무조건 열립니다 */
-        .sns-section { padding: 100px 20px; text-align: center; }
-        .sns-btn { 
-            display: inline-block; width: 80%; max-width: 400px; padding: 25px; margin: 15px;
-            background: var(--neon); color: #000; text-decoration: none; 
-            font-weight: 900; font-size: 1.5rem; border-radius: 50px; 
-            box-shadow: 0 0 30px rgba(0,255,255,0.3); transition: 0.3s;
+        :root {
+            --neon: #00FFFF;
+            --dark: #000000;
+            --card-bg: #080808;
+            --glow: 0 0 20px rgba(0, 255, 255, 0.4);
         }
-        .sns-btn:active { transform: scale(0.95); opacity: 0.8; }
-        .tik-btn { background: #fff; color: #000; }
 
-        footer { padding: 50px; text-align: center; color: #222; font-family: 'Cinzel'; letter-spacing: 10px; }
+        /* [PC/폰 화면 자동 설정] 절대 깨지지 않는 레이아웃 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--dark); color: white; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; line-height: 1.8; }
+
+        /* [언어 변환 엔진] 버튼 디자인 및 고정 */
+        .lang-engine {
+            position: fixed; top: 15px; right: 15px; z-index: 10000;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+            background: rgba(0,0,0,0.9); padding: 8px; border: 1px solid var(--neon); border-radius: 4px;
+        }
+        .lang-engine button {
+            background: none; border: 1px solid #222; color: var(--neon);
+            font-size: 10px; font-weight: 900; padding: 5px 10px; cursor: pointer; transition: 0.3s;
+        }
+        .lang-engine button.active { background: var(--neon); color: black; border-color: var(--neon); }
+
+        /* 메인 히어로 */
+        header { min-height: 85vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .hero-title { font-family: 'Cinzel', serif; font-size: clamp(3rem, 12vw, 9rem); color: var(--neon); letter-spacing: 15px; font-weight: 900; text-shadow: var(--glow); }
+        .hero-sub { font-family: 'Montserrat'; font-size: 14px; color: #555; letter-spacing: 10px; margin-top: 15px; }
+
+        /* 로봇 집중 컨텐츠 영역 */
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-family: 'Cinzel'; font-size: clamp(2rem, 5vw, 4rem); letter-spacing: 10px; color: white; }
+        .neon-bar { width: 100px; height: 3px; background: var(--neon); margin: 20px auto; box-shadow: var(--glow); }
+
+        .pillar { background: var(--card-bg); border: 1px solid #151515; margin-bottom: 40px; border-radius: 12px; overflow: hidden; }
+        summary { padding: 40px; font-size: clamp(1.2rem, 4vw, 2.5rem); font-weight: 900; color: #ccc; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::after { content: "+"; color: var(--neon); font-size: 2rem; }
+        details[open] summary::after { content: "-"; }
+
+        .details-body { padding: 0 40px 60px; border-top: 1px solid #151515; padding-top: 40px; animation: fadeIn 0.6s ease-out; }
+        .details-body h3 { font-size: 2.2rem; color: white; margin-bottom: 25px; border-left: 8px solid var(--neon); padding-left: 20px; }
+        .details-body p { font-size: 1.3rem; color: #888; line-height: 2.2; margin-bottom: 40px; }
+
+        /* 기술 사양 그리드 */
+        .spec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .spec-item { background: #000; padding: 30px; border: 1px solid #222; border-bottom: 4px solid var(--neon); }
+        .spec-item h4 { color: var(--neon); font-size: 1.4rem; margin-bottom: 15px; }
+        .spec-item ul { list-style: none; color: #666; font-size: 1.1rem; }
+        .spec-item li { margin-bottom: 8px; }
+
+        /* [유튜브/틱톡/이메일] 푸터 완벽 고정 */
+        footer { padding: 150px 20px 100px; text-align: center; background: #000; border-top: 1px solid #111; }
+        .sns-wrap { display: flex; justify-content: center; gap: clamp(40px, 15vw, 150px); margin-bottom: 80px; flex-wrap: wrap; }
+        .sns-link { text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; transition: 0.5s; }
+        .sns-link i { font-size: clamp(4rem, 10vw, 6.5rem); margin-bottom: 20px; transition: 0.4s; }
+        .sns-link span { font-size: 1.1rem; font-weight: 900; letter-spacing: 5px; }
+        .sns-link:hover { color: var(--neon); transform: translateY(-15px); }
+
+        .contact-mail { margin-top: 60px; font-family: 'Montserrat'; font-size: 1.6rem; color: #ccc; letter-spacing: 2px; }
+        .contact-mail a { color: var(--neon); text-decoration: none; border-bottom: 1px solid var(--neon); }
+
+        .final-sig { font-family: 'Cinzel'; font-size: 1.3rem; margin-top: 100px; color: #1a1a1a; letter-spacing: 20px; font-weight: 900; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 모바일 화면 깨짐 방지 */
+        @media (max-width: 768px) {
+            .lang-engine { top: 10px; right: 10px; width: auto; }
+            summary { padding: 30px 20px; }
+            .details-body { padding: 0 20px 50px; }
+            .sns-wrap { gap: 60px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="lang-bar">
-        <button class="lang-btn active" onclick="setLang('ko')">KOREAN</button>
-        <button class="lang-btn" onclick="setLang('en')">ENGLISH</button>
-        <button class="lang-btn" onclick="setLang('zh')">CHINESE</button>
-        <button class="lang-btn" onclick="setLang('ar')">ARABIC</button>
-        <button class="lang-btn" onclick="setLang('ja')">JAPANESE</button>
-        <button class="lang-btn" onclick="setLang('es')">SPANISH</button>
+    <div class="lang-engine">
+        <button onclick="changeL('ko')" id="btn-ko" class="active">KOR</button>
+        <button onclick="changeL('en')" id="btn-en">ENG</button>
+        <button onclick="changeL('zh')" id="btn-zh">CHN</button>
+        <button onclick="changeL('ar')" id="btn-ar">ARA</button>
+        <button onclick="changeL('hi')" id="btn-hi">IND</button>
+        <button onclick="changeL('es')" id="btn-es">SPA</button>
     </div>
 
     <header>
-        <div class="hero-title" id="h-title">HK-FIGURE</div>
-        <div id="h-slogan">"로봇으로 인류를 구원하다"</div>
+        <div class="hero-title">HK-FIGURE</div>
+        <div class="hero-sub">CHAIRMAN LEE JAEWAN</div>
     </header>
 
-    <div class="container">
+    <div class="main-container">
+        <div class="section-header">
+            <h2 id="txt-genesis">ROBOTIC GENESIS</h2>
+            <div class="neon-bar"></div>
+        </div>
+
         <div class="pillar">
             <details open>
-                <summary id="s1">01. ROBOTICS</summary>
-                <div class="details-content">
-                    <h3 id="t1">포스코 x Figure AI 콜라보레이션</h3>
-                    <p id="p1">포스코의 초정밀 특수강 기술과 HK 그룹의 독자적인 AI를 결합하여, 인간의 한계를 뛰어넘는 휴머노이드 솔루션을 전 세계에 공급합니다.</p>
+                <summary id="txt-sum1">01. COLLABORATION</summary>
+                <div class="details-body">
+                    <h3 id="txt-h3-1">포스코 특수강 x Figure AI 지능</h3>
+                    <p id="txt-p1">Figure AI의 압도적인 자율 인지 시스템과 포스코의 세계 최고 수준 특수강 제조 기술이 만나 인류 문명의 새로운 육체를 창조합니다. 오롯이 로봇에만 집중하는 HK-FIGURE의 위대한 여정입니다.</p>
+                    <div class="spec-grid">
+                        <div class="spec-item">
+                            <h4 id="txt-th1">Hardware Spec</h4>
+                            <ul id="txt-ul1">
+                                <li>극강의 경량 고강도 특수강 골격</li>
+                                <li>충격 흡수 및 미세 정밀 제어 시스템</li>
+                                <li>성간 물류 대응 내구성 설계</li>
+                            </ul>
+                        </div>
+                        <div class="spec-item">
+                            <h4 id="txt-th2">Software Spec</h4>
+                            <ul id="txt-ul2">
+                                <li>멀티모달 대규모 언어 모델 탑재</li>
+                                <li>실시간 자율 학습 및 환경 인지</li>
+                                <li>인간 친화적 상호작용 지능</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </details>
         </div>
 
         <div class="pillar">
             <details>
-                <summary id="s2">02. PARTS BANK</summary>
-                <div class="details-content">
-                    <h3 id="t2">글로벌 부품 표준화 허브</h3>
-                    <p id="p2">전 세계 로봇 핵심 부품의 표준을 제시합니다. 전용 부품 뱅크를 통해 완벽한 유지보수 시스템을 제공합니다.</p>
-                </div>
-            </details>
-        </div>
-
-        <div class="pillar">
-            <details>
-                <summary id="s3">03. HK-PHONE</summary>
-                <div class="details-content">
-                    <h3 id="t3">차세대 양자 보안 홀로그램</h3>
-                    <p id="p3">양자 보안 기술이 적용된 차세대 통신 기기입니다. HK-FIGURE 로봇의 실시간 제어와 보안 통신을 위한 최적의 인터페이스입니다.</p>
+                <summary id="txt-sum2">02. MASS PRODUCTION</summary>
+                <div class="details-body">
+                    <h3 id="txt-h3-2">연간 1,000만 대 생산 로드맵</h3>
+                    <p id="txt-p2">포항과 울산의 거대 인프라를 활용하여 Figure 01 휴머노이드를 대량 양산합니다. 모든 산업 현장에서 인간을 위험한 노동으로부터 100% 해방시키는 것이 우리의 사명입니다.</p>
                 </div>
             </details>
         </div>
     </div>
 
-    <div class="sns-section">
-        <h2 style="margin-bottom:30px; letter-spacing:5px;">GLOBAL CHANNELS</h2>
-        <a href="https://www.youtube.com/@HK-Holdings" target="_blank" class="sns-btn"><i class="fab fa-youtube"></i> YOUTUBE</a>
-        <a href="https://www.tiktok.com/@hkholdings" target="_blank" class="sns-btn tik-btn"><i class="fab fa-tiktok"></i> TIKTOK</a>
-        
-        <div style="margin-top:50px; color:var(--neon); font-size:1.2rem;">
-            info@hkfigure.com
+    <footer>
+        <div class="sns-wrap">
+            <a href="https://www.youtube.com/@HK-Holdings" target="_blank" rel="noopener noreferrer" class="sns-link">
+                <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                <span>YOUTUBE</span>
+            </a>
+            <a href="https://www.tiktok.com/@hkholdings" target="_blank" rel="noopener noreferrer" class="sns-link">
+                <i class="fab fa-tiktok"></i>
+                <span>TIKTOK</span>
+            </a>
         </div>
-    </div>
 
-    <footer>CHAIRMAN LEE JAEWAN</footer>
+        <div class="contact-mail">
+            MAIL: <a href="mailto:info@hkfigure.ai.kr">info@hkfigure.ai.kr</a>
+        </div>
+
+        <div class="final-sig">CHAIRMAN LEE JAEWAN</div>
+    </footer>
 
     <script>
-        const content = {
-            ko: { title:"HK-FIGURE", slogan:"\"로봇으로 인류를 구원하다\"", s1:"01. 로보틱스", t1:"포스코 x Figure AI 콜라보", p1:"초정밀 특수강 기술과 독자적 AI의 결합. 인간 노동을 완전히 대체할 지능형 플랫폼입니다.", s2:"02. 파츠뱅크", t2:"글로벌 부품 허브", p2:"로봇 핵심 부품의 표준을 제시하고 완벽한 유지보수를 지원합니다.", s3:"03. HK-폰", t3:"양자 보안 홀로그램", p3:"로봇 실시간 제어를 위한 차세대 보안 인터페이스입니다." },
-            en: { title:"HK-FIGURE", slogan:"\"Saving Humanity with Robots\"", s1:"01. ROBOTICS", t1:"POSCO x Figure AI", p1:"Combining precision steel with proprietary AI to create intelligent platforms.", s2:"02. PARTS BANK", t2:"Global Hub", p2:"Standardizing robotic parts and providing full maintenance.", s3:"03. HK-PHONE", t3:"Quantum Hologram", p3:"Next-gen secure interface for real-time robot control." }
-            // ... (중국어, 아랍어, 일본어, 스페인어 생략 - 위 패턴과 동일하게 적용)
+        // [언어 변환 최종 엔진] 6개국어 완벽 지원
+        const L = {
+            ko: { g:"로봇의 기원", s1:"01. 콜라보레이션", h1:"포스코 특수강 x Figure AI 지능", p1:"Figure AI의 지능과 포스코의 기술이 만나 인류의 새로운 육체를 창조합니다.", th1:"하드웨어 사양", th2:"소프트웨어 사양", l1:"경량 고강도 특수강", l2:"정밀 제어 시스템", l3:"내구성 설계", l4:"대규모 언어 모델", l5:"실시간 자율 학습", l6:"인간 친화 지능", s2:"02. 대량 양산", h2:"연간 1,000만 대 생산", p2:"모든 현장에서 인간을 노동으로부터 해방시키는 양산 체제를 구축합니다." },
+            en: { g:"ROBOTIC GENESIS", s1:"01. COLLABORATION", h1:"POSCO Steel x Figure AI", p1:"The union of Figure AI's intelligence and POSCO's technology creates humanity's new body.", th1:"Hardware", th2:"Software", l1:"Light High-Strength Steel", l2:"Precision Control", l3:"Durable Design", l4:"Large Language Model", l5:"Real-time Learning", l6:"Human-Friendly AI", s2:"02. MASS PRODUCTION", h2:"10M Units Annually", p2:"Establishing production lines to liberate humanity from labor." },
+            zh: { g:"机器人起源", s1:"01. 合作", h1:"浦项制铁 x Figure AI 智能", p1:"Figure AI 的智能与浦项制铁的技术相结合，创造了人类的新身体。", th1:"硬件规格", th2:"软件规格", l1:"轻质高强度钢", l2:"精密控制系统", l3:"耐用设计", l4:"大语言模型", l5:"实时自主学习", l6:"人机交互智能", s2:"02. 大量生产", h2:"年产 1,000 万台", p2:"建立生产线，将人类从劳动中解放出来。" },
+            ar: { g:"نشأة الروبوتات", s1:"01. التعاون", h1:"بوسكو x في규어 AI", p1:"ذكاء في규어 AI يلتقي مع تكنولوجيا بوسكو لخلق جسم جديد للبشرية.", th1:"الأجهزة", th2:"البرمجيات", l1:"فولاذ عالي القوة", l2:"نظام تحكم دقيق", l3:"تصميم متين", l4:"نموذج لغوي كبير", l5:"تعلم ذاتي", l6:"ذكاء تفاعلي", s2:"02. الإنتاج الضخم", h2:"10 ملايين وحدة سنوياً", p2:"إنشاء خطوط إنتاج لتحرير البشرية من العمل." },
+            hi: { g:"रोबोटिक जेनेसिस", s1:"01. सहयोग", h1:"पॉस्को x Figure AI", p1:"Figure AI की बुद्धिमत्ता और पॉ스코 की तकनीक मानवता का नया शरीर बनाती है।", th1:"हार्डवेयर", th2:"सॉफ्टवेयर", l1:"उच्च शक्ति स्टील", l2:"सटीक नियंत्रण", l3:"टिकाऊ डिजाइन", l4:"बड़ा भाषा मॉडल", l5:"वास्तविक समय सीखना", l6:"मानव-अनुकूल एआई", s2:"02. बड़े पैमाने पर उत्पादन", h2:"सालाना 10 मिलियन इकाइयां", p2:"मानवता को श्रम से मुक्त करने के लिए उत्पादन लाइनें स्थापित करना।" },
+            es: { g:"GÉNESIS ROBÓTICA", s1:"01. COLABORACIÓN", h1:"Acero POSCO x Figure AI", p1:"La unión de Figure AI y POSCO crea el nuevo cuerpo de la humanidad.", th1:"Hardware", th2:"Software", l1:"Acero de alta resistencia", l2:"Control de precisión", l3:"Diseño duradero", l4:"Modelo de lenguaje", l5:"Aprendizaje real", l6:"IA amigable", s2:"02. PRODUCCIÓN EN MASA", h2:"10M unidades al año", p2:"Estableciendo líneas de producción para liberar a la humanidad." }
         };
 
-        function setLang(l) {
-            const d = content[l] || content['en'];
-            document.getElementById('h-title').innerText = d.title;
-            document.getElementById('h-slogan').innerText = d.slogan;
-            document.getElementById('s1').innerText = d.s1;
-            document.getElementById('t1').innerText = d.t1;
-            document.getElementById('p1').innerText = d.p1;
-            document.getElementById('s2').innerText = d.s2;
-            document.getElementById('t2').innerText = d.t2;
-            document.getElementById('p2').innerText = d.p2;
-            document.getElementById('s3').innerText = d.s3;
-            document.getElementById('t3').innerText = d.t3;
-            document.getElementById('p3').innerText = d.p3;
+        function changeL(lang) {
+            document.querySelectorAll('.lang-engine button').forEach(b => b.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
             
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+            document.getElementById('txt-genesis').innerText = L[lang].g;
+            document.getElementById('txt-sum1').innerText = L[lang].s1;
+            document.getElementById('txt-h3-1').innerText = L[lang].h1;
+            document.getElementById('txt-p1').innerText = L[lang].p1;
+            document.getElementById('txt-th1').innerText = L[lang].th1;
+            document.getElementById('txt-th2').innerText = L[lang].th2;
+            document.getElementById('txt-ul1').children[0].innerText = L[lang].l1;
+            document.getElementById('txt-ul1').children[1].innerText = L[lang].l2;
+            document.getElementById('txt-ul1').children[2].innerText = L[lang].l3;
+            document.getElementById('txt-ul2').children[0].innerText = L[lang].l4;
+            document.getElementById('txt-ul2').children[1].innerText = L[lang].l5;
+            document.getElementById('txt-ul2').children[2].innerText = L[lang].l6;
+            document.getElementById('txt-sum2').innerText = L[lang].s2;
+            document.getElementById('txt-h3-2').innerText = L[lang].h2;
+            document.getElementById('txt-p2').innerText = L[lang].p2;
         }
     </script>
 </body>
