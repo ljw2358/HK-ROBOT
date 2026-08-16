@@ -1,117 +1,436 @@
+출발 언어영어도착 언어한국어번역하기
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>HK-MASTER-TERMINAL // v9.42</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HK-ROBOT TERMINAL</title>
+  
   <style>
-    :root { --bg: #000; --text: #00ff41; --dim: #003b00; }
-    body { background: var(--bg); color: var(--text); font-family: 'Consolas', 'Courier New', monospace; margin: 0; padding: 5px; font-size: 10px; line-height: 1.2; }
-    
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
-    .panel { border: 1px solid var(--dim); padding: 5px; height: 180px; overflow-y: hidden; }
-    .header-bar { border: 1px solid var(--text); padding: 5px; margin-bottom: 5px; display: flex; justify-content: space-between; }
-    
-    h4 { margin: 0; color: #fff; background: var(--dim); padding: 2px; }
-    .data-line { display: flex; justify-content: space-between; border-bottom: 1px solid #111; }
-    .val { color: #fff; }
-    .crit { color: #ff0000; font-weight: bold; }
+    /* 기본 테마: 터미널 사이버 폰트 & 블랙/그린 콘셉트 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    body {
+      background-color: #050505;
+      color: #00ff66;
+      height: 100vh;
+      overflow: hidden;
+      padding: 15px;
+    }
+
+    /* 전체 레이아웃 (높이 100% 꽉 채움) */
+    .terminal-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid #00ff66;
+      padding: 10px;
+      gap: 10px;
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
+    }
+
+    /* 1. 상단 스테이터스 바 & 16개국 언어 선택기 */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #003311;
+      padding: 8px 15px;
+      border: 1px solid #00ff66;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .lang-select {
+      background: #001a08;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .lang-select option {
+      background: #050505;
+      color: #00ff66;
+    }
+
+    /* 2. 대시보드 그리드 영역 (화면 상단 분할 패널) */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px;
+      flex: 2; /* 비율 조정 */
+    }
+
+    .panel {
+      border: 1px solid #00ff66;
+      background: rgba(0, 20, 5, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      background: #00ff66;
+      color: #000000;
+      padding: 4px 8px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .panel-body {
+      padding: 10px;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(0, 255, 102, 0.2);
+      padding-bottom: 2px;
+    }
+
+    .data-value {
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    /* 3. 하단 실시간 시스템 터미널 로그 (비어있던 하단부 전체 채움) */
+    .console-section {
+      flex: 1;
+      border: 1px solid #00ff66;
+      background: #000d03;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .console-log {
+      padding: 10px;
+      font-size: 0.85rem;
+      color: #00cc52;
+      overflow-y: auto;
+      flex: 1;
+      line-height: 1.4;
+    }
+
+    .log-entry {
+      margin-bottom: 4px;
+    }
+
+    .log-time {
+      color: #888;
+    }
   </style>
 </head>
 <body>
 
-<div class="header-bar">
-  <span>HK_NEURAL_CORE_LINK // STATUS: ACTIVE // UPTIME: 8442h</span>
-  <select id="lang" onchange="updateUI(this.value)" style="background:#000; color:#fff; border:1px solid #333; font-size: 10px;">
-    <option value="ko">KOREAN</option><option value="en">ENGLISH</option>
-  </select>
-</div>
+  <div class="terminal-container">
 
-<div class="grid">
-  <!-- SYSTEM CORE -->
-  <div class="panel">
-    <h4 id="lbl-sys">SYSTEM_VITALS</h4>
-    <div class="data-line"><span>CPU_TEMP</span><span class="val">42.8°C</span></div>
-    <div class="data-line"><span>CORE_LOAD_01</span><span class="val">12%</span></div>
-    <div class="data-line"><span>CORE_LOAD_02</span><span class="val">08%</span></div>
-    <div class="data-line"><span>MEM_ALLOC</span><span class="val">14.2GB/64GB</span></div>
-    <div class="data-line"><span>BUS_FREQ</span><span class="val">3.2GHz</span></div>
-    <div class="data-line"><span>VOLT_VCC</span><span class="val">1.24V</span></div>
-    <div class="data-line"><span>FAN_SPEED</span><span class="val">1200RPM</span></div>
-    <div class="data-line"><span>DISK_IO</span><span class="val">44MB/s</span></div>
+    <!-- 상단 바: 시스템 정보 + 16개국 언어 선택기 -->
+    <header class="status-bar">
+      <div id="sys-status">HK_ROBOT_SYSTEM // STATUS: ACTIVE // SYSTEM: OK</div>
+      <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
+        <option value="ko" selected>한국어 (KR)</option>
+        <option value="en">English (US)</option>
+        <option value="zh">中文 (CN)</option>
+        <option value="ar">العربية (AR)</option>
+        <option value="hi">हिन्दी (IN)</option>
+        <option value="es">Español (ES)</option>
+        <option value="pt">Português (BR)</option>
+        <option value="uk">Українська (UA)</option>
+        <option value="ja">日本語 (JP)</option>
+        <option value="ru">Русский (RU)</option>
+        <option value="vi">Tiếng Việt (VN)</option>
+        <option value="th">ไทย (TH)</option>
+        <option value="id">Bahasa Indonesia (ID)</option>
+        <option value="de">Deutsch (DE)</option>
+        <option value="it">Italiano (IT)</option>
+        <option value="fr">Français (FR)</option>
+      </select>
+    </header>
+
+    <!-- 대시보드 6분할 패널 -->
+    <main class="dashboard-grid">
+
+      <!-- 패널 1: CPU & 코어 -->
+      <div class="panel">
+        <div class="panel-header" id="p1-title">CPU & CORE</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p1-k1">온도 (CPU Temp)</span><span class="data-value">42.5°C</span></div>
+          <div class="data-row"><span id="p1-k2">사용률 (Usage)</span><span class="data-value">18.4%</span></div>
+          <div class="data-row"><span id="p1-k3">클럭 (Clock)</span><span class="data-value">3.4 GHz</span></div>
+          <div class="data-row"><span id="p1-k4">전력 (Power)</span><span class="data-value">45W</span></div>
+        </div>
+      </div>
+
+      <!-- 패널 2: 네트워크/연결 -->
+      <div class="panel">
+        <div class="panel-header" id="p2-title">NETWORK</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p2-k1">IP 주소 (IP Address)</span><span class="data-value">192.168.0.100</span></div>
+          <div class="data-row"><span id="p2-k2">지연율 (Latency)</span><span class="data-value">2ms</span></div>
+          <div class="data-row"><span id="p2-k3">패킷 수신 (RX)</span><span class="data-value">124.5 MB</span></div>
+          <div class="data-row"><span id="p2-k4">패킷 송신 (TX)</span><span class="data-value">88.2 MB</span></div>
+        </div>
+      </div>
+
+      <!-- 패널 3: 액추에이터/모터 -->
+      <div class="panel">
+        <div class="panel-header" id="p3-title">ACTUATORS</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p3-k1">관절 1 (Joint 1)</span><span class="data-value">0.0° / OK</span></div>
+          <div class="data-row"><span id="p3-k2">관절 2 (Joint 2)</span><span class="data-value">+15.2° / OK</span></div>
+          <div class="data-row"><span id="p3-k3">관절 3 (Joint 3)</span><span class="data-value">-45.8° / OK</span></div>
+          <div class="data-row"><span id="p3-k4">토크 (Torque)</span><span class="data-value">12.4 Nm</span></div>
+        </div>
+      </div>
+
+      <!-- 패널 4: 메모리/배터리 -->
+      <div class="panel">
+        <div class="panel-header" id="p4-title">MEMORY & POWER</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p4-k1">RAM 할당 (RAM)</span><span class="data-value">4.2GB / 16GB</span></div>
+          <div class="data-row"><span id="p4-k2">배터리 (Battery)</span><span class="data-value">98% [Charging]</span></div>
+          <div class="data-row"><span id="p4-k3">전압 (Voltage)</span><span class="data-value">24.1V</span></div>
+          <div class="data-row"><span id="p4-k4">전류 (Current)</span><span class="data-value">3.2A</span></div>
+        </div>
+      </div>
+
+      <!-- 패널 5: 비전/센서 -->
+      <div class="panel">
+        <div class="panel-header" id="p5-title">SENSORS & VISION</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p5-k1">라이다 (LiDAR)</span><span class="data-value">ACTIVE</span></div>
+          <div class="data-row"><span id="p5-k2">카메라 (Depth Cam)</span><span class="data-value">60 FPS</span></div>
+          <div class="data-row"><span id="p5-k3">IMU 센서</span><span class="data-value">STABLE</span></div>
+          <div class="data-row"><span id="p5-k4">초음파 (Ultrasonic)</span><span class="data-value">NORMAL</span></div>
+        </div>
+      </div>
+
+      <!-- 패널 6: 로봇 제어 상태 -->
+      <div class="panel">
+        <div class="panel-header" id="p6-title">CONTROL MODE</div>
+        <div class="panel-body">
+          <div class="data-row"><span id="p6-k1">제어 모드 (Mode)</span><span class="data-value">AUTO_NAV</span></div>
+          <div class="data-row"><span id="p6-k2">비상 정지 (E-STOP)</span><span class="data-value" style="color: #00ff66;">OFF</span></div>
+          <div class="data-row"><span id="p6-k3">목적지 (Target)</span><span class="data-value">WAYPOINT_04</span></div>
+          <div class="data-row"><span id="p6-k4">동작 속도 (Speed)</span><span class="data-value">1.2 m/s</span></div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 하단 영역: 실시간 콘솔 모니터링 로그 (화면 하단을 꽉 채워줌) -->
+    <footer class="console-section">
+      <div class="panel-header" id="console-title">SYSTEM REALTIME CONSOLE LOGS</div>
+      <div class="console-log" id="consoleLog">
+        <div class="log-entry"><span class="log-time">[00:00:01]</span> HK-ROBOT System Initialization Started.</div>
+        <div class="log-entry"><span class="log-time">[00:00:02]</span> Loading modules... CPU, Network, Sensors OK.</div>
+        <div class="log-entry"><span class="log-time">[00:00:03]</span> Actuators calibrated successfully.</div>
+        <div class="log-entry"><span class="log-time">[00:00:05]</span> Connecting to HK-NEXUS Main Server... Connected.</div>
+        <div class="log-entry"><span class="log-time">[00:00:06]</span> Realtime telemetry feed stream active.</div>
+      </div>
+    </footer>
+
   </div>
 
-  <!-- NETWORK -->
-  <div class="panel">
-    <h4 id="lbl-net">NETWORK_TOPOLOGY</h4>
-    <div class="data-line"><span>IPV4_ADDR</span><span class="val">192.168.1.55</span></div>
-    <div class="data-line"><span>GATEWAY</span><span class="val">10.0.0.1</span></div>
-    <div class="data-line"><span>LATENCY</span><span class="val">0.4ms</span></div>
-    <div class="data-line"><span>PKT_DROP</span><span class="val">0.000%</span></div>
-    <div class="data-line"><span>RX_BYTES</span><span class="val">84.2MB</span></div>
-    <div class="data-line"><span>TX_BYTES</span><span class="val">12.5MB</span></div>
-    <div class="data-line"><span>ENCRYPT</span><span class="val">AES-256</span></div>
-  </div>
+  <!-- 16개국 번역 및 자바스크립트 -->
+  <script>
+    const i18n = {
+      ko: {
+        sysStatus: "HK_ROBOT 시스템 // 상태: 정상 작동 // 시스템: OK",
+        consoleTitle: "시스템 실시간 콘솔 로그",
+        p1: ["CPU & 코어", "온도", "사용률", "클럭", "전력"],
+        p2: ["네트워크", "IP 주소", "지연율", "패킷 수신", "패킷 송신"],
+        p3: ["액추에이터", "관절 1", "관절 2", "관절 3", "토크"],
+        p4: ["메모리 & 전력", "RAM 할당", "배터리", "전압", "전류"],
+        p5: ["센서 & 비전", "라이다", "카메라", "IMU 센서", "초음파"],
+        p6: ["제어 모드", "제어 모드", "비상 정지", "목적지", "동작 속도"]
+      },
+      en: {
+        sysStatus: "HK_ROBOT SYSTEM // STATUS: ACTIVE // SYSTEM: OK",
+        consoleTitle: "SYSTEM REALTIME CONSOLE LOGS",
+        p1: ["CPU & CORE", "Temp", "Usage", "Clock", "Power"],
+        p2: ["NETWORK", "IP Address", "Latency", "RX Packet", "TX Packet"],
+        p3: ["ACTUATORS", "Joint 1", "Joint 2", "Joint 3", "Torque"],
+        p4: ["MEMORY & POWER", "RAM", "Battery", "Voltage", "Current"],
+        p5: ["SENSORS & VISION", "LiDAR", "Camera", "IMU Sensor", "Ultrasonic"],
+        p6: ["CONTROL MODE", "Control Mode", "E-STOP", "Target", "Speed"]
+      },
+      zh: {
+        sysStatus: "HK_ROBOT 系统 // 状态: 运行中 // 系统: 正常",
+        consoleTitle: "系统实时控制台日志",
+        p1: ["CPU 与核心", "温度", "使用率", "时钟", "功率"],
+        p2: ["网络", "IP 地址", "延迟", "接收数据", "发送数据"],
+        p3: ["执行器", "关节 1", "关节 2", "关节 3", "扭矩"],
+        p4: ["内存与电源", "内存分配", "电池", "电压", "电流"],
+        p5: ["传感器与视觉", "激光雷达", "摄像头", "IMU 传感器", "超声波"],
+        p6: ["控制模式", "控制模式", "紧急停止", "目标点", "速度"]
+      },
+      ar: {
+        sysStatus: "HK_ROBOT النظام // الحالة: نشط // النظام: ممتاز",
+        consoleTitle: "سجل وحدة التحكم المباشر للنظام",
+        p1: ["المعالج والنواة", "الحرارة", "الاستخدام", "السرعة", "الطاقة"],
+        p2: ["الشبكة", "عنوان IP", "التأخير", "البيانات المستلمة", "البيانات المرسلة"],
+        p3: ["المحرّكات", "المفصل 1", "المفصل 2", "المفصل 3", "العزم"],
+        p4: ["الذاكرة والطاقة", "الذاكرة", "البطارية", "الجهد", "التيار"],
+        p5: ["المستشعرات والرؤية", "LIDAR", "الكاميرا", "مستشعر IMU", "الموجات فوق الصوتية"],
+        p6: ["وضع التحكم", "وضع التحكم", "إيقاف الطوارئ", "الهدف", "السرعة"]
+      },
+      hi: {
+        sysStatus: "HK_ROBOT सिस्टम // स्थिति: सक्रिय // सिस्टम: ठीक है",
+        consoleTitle: "सिस्टम रियलटाइम कंसोल लॉग",
+        p1: ["सीपीयू और कोर", "तापमान", "उपयोग", "क्लॉक", "पावर"],
+        p2: ["नेटवर्क", "आईपी पता", "विलंबता", "आरएक्स पैकेट", "टीएक्स पैकेट"],
+        p3: ["एक्ट्यूएटर्स", "जॉइंट 1", "जॉइंट 2", "जॉइंट 3", "टॉर्क"],
+        p4: ["मेमोरी और पावर", "रैम", "बैटरी", "वोल्टेज", "करंट"],
+        p5: ["सेंसर्स और विजन", "लिडार", "कैमरा", "आईएमयू सेंसर", "अल्ट्रासोनिक"],
+        p6: ["नियंत्रण मोड", "नियंत्रण मोड", "इमरजेंसी स्टॉप", "लक्ष्य", "गति"]
+      },
+      es: {
+        sysStatus: "HK_ROBOT SISTEMA // ESTADO: ACTIVO // SISTEMA: OK",
+        consoleTitle: "REGISTROS DE CONSOLA EN TIEMPO REAL",
+        p1: ["CPU Y NÚCLEO", "Temp", "Uso", "Reloj", "Potencia"],
+        p2: ["RED", "Dirección IP", "Latencia", "Paquete RX", "Paquete TX"],
+        p3: ["ACTUADORES", "Articulación 1", "Articulación 2", "Articulación 3", "Par"],
+        p4: ["MEMORIA Y ENERGÍA", "RAM", "Batería", "Voltaje", "Corriente"],
+        p5: ["SENSORES Y VISIÓN", "LiDAR", "Cámara", "Sensor IMU", "Ultrasonido"],
+        p6: ["MODO DE CONTROL", "Modo de Control", "E-STOP", "Objetivo", "Velocidad"]
+      },
+      pt: {
+        sysStatus: "HK_ROBOT SISTEMA // STATUS: ATIVO // SISTEMA: OK",
+        consoleTitle: "LOGS DO CONSOLE EM TEMPO REAL DO SISTEMA",
+        p1: ["CPU E NÚCLEO", "Temp", "Uso", "Clock", "Potência"],
+        p2: ["REDE", "Endereço IP", "Latência", "Pacote RX", "Pacote TX"],
+        p3: ["ATUADORES", "Junta 1", "Junta 2", "Junta 3", "Torque"],
+        p4: ["MEMÓRIA E ENERGIA", "RAM", "Bateria", "Tensão", "Corrente"],
+        p5: ["SENSORES E VISÃO", "LiDAR", "Câmera", "Sensor IMU", "Ultrassônico"],
+        p6: ["MODO DE CONTROLE", "Modo de Controle", "E-STOP", "Alvo", "Velocidade"]
+      },
+      uk: {
+        sysStatus: "HK_ROBOT СИСТЕМА // СТАТУС: АКТИВНИЙ // СИСТЕМА: OK",
+        consoleTitle: "КОНСОЛЬНІ ЛОГИ СИСТЕМИ В РЕАЛЬНОМУ ЧАСІ",
+        p1: ["CPU ТА ЯДРО", "Темп", "Використання", "Частота", "Потужність"],
+        p2: ["МЕРЕЖА", "IP-адреса", "Затримка", "Пакет RX", "Пакет TX"],
+        p3: ["ПРИВОДИ", "Cуглоб 1", "Cуглоб 2", "Cуглоб 3", "Крутний момент"],
+        p4: ["ПАМ'ЯТЬ ТА ЖИВЛЕННЯ", "RAM", "Батарея", "Напруга", "Струм"],
+        p5: ["СЕНСОРИ ТА ВІЗІЯ", "LiDAR", "Камера", "Датчик IMU", "Ультразвук"],
+        p6: ["РЕЖИМ КЕРУВАННЯ", "Режим керування", "E-STOP", "Ціль", "Швидкість"]
+      },
+      ja: {
+        sysStatus: "HK_ROBOT システム // ステータス: 正常稼働 // システム: OK",
+        consoleTitle: "システム リアルタイム コンソール ログ",
+        p1: ["CPU & コア", "温度", "使用率", "クロック", "電力"],
+        p2: ["ネットワーク", "IP アドレス", "レイテンシ", "RX パケット", "TX パケット"],
+        p3: ["アクチュエータ", "関節 1", "関節 2", "関節 3", "トルク"],
+        p4: ["メモリ & 電源", "RAM", "バッテリー", "電圧", "電流"],
+        p5: ["センサー & ビジョン", "LiDAR", "カメラ", "IMU センサー", "超音波"],
+        p6: ["制御モード", "制御モード", "非常停止", "目標地", "速度"]
+      },
+      ru: {
+        sysStatus: "HK_ROBOT СИСТЕМА // СТАТУС: АКТИВЕН // СИСТЕМА: OK",
+        consoleTitle: "КОНСОЛЬНЫЕ ЛОГИ СИСТЕМЫ В РЕАЛЬНОМ ВРЕМЕНИ",
+        p1: ["ЦПУ И ЯДРО", "Темп", "Загрузка", "Частота", "Мощность"],
+        p2: ["СЕТЬ", "IP-адрес", "Задержка", "Пакет RX", "Пакет TX"],
+        p3: ["ПРИВОДЫ", "Сустав 1", "Сустав 2", "Сустав 3", "Крутящий момент"],
+        p4: ["ПАМЯТЬ И ПИТАНИЕ", "ОЗУ", "Батарея", "Напряжение", "Ток"],
+        p5: ["ДАТЧИКИ И ЗРЕНИЕ", "LiDAR", "Камера", "Датчик IMU", "Ультразвук"],
+        p6: ["РЕЖИМ УПРАВЛЕНИЯ", "Режим управления", "E-STOP", "Цель", "Скорость"]
+      },
+      vi: {
+        sysStatus: "HK_ROBOT HỆ THỐNG // TRẠNG THÁI: HOẠT ĐỘNG // HỆ THỐNG: OK",
+        consoleTitle: "NHẬT KÝ ĐIỀU KHIỂN THỜI GIAN THỰC",
+        p1: ["CPU & NHÂN", "Nhiệt độ", "Sử dụng", "Xung nhịp", "Năng lượng"],
+        p2: ["MẠNG", "Địa chỉ IP", "Độ trễ", "Gói RX", "Gói TX"],
+        p3: ["BỘ TRUYỀN ĐỘNG", "Khớp 1", "Khớp 2", "Khớp 3", "Mô-men xoắn"],
+        p4: ["BỘ NHỚ & NGUỒN", "RAM", "Pin", "Điện áp", "Dòng điện"],
+        p5: ["CẢM BIẾN & THỊ GIÁC", "LiDAR", "Camera", "Cảm biến IMU", "Siêu âm"],
+        p6: ["CHẾ ĐỘ ĐIỀU KHIỂN", "Chế độ điều khiển", "E-STOP", "Mục tiêu", "Tốc độ"]
+      },
+      th: {
+        sysStatus: "HK_ROBOT ระบบ // สถานะ: ใช้งานอยู่ // ระบบ: ปกติ",
+        consoleTitle: "บันทึกคอนโซลเรียลไทม์ของระบบ",
+        p1: ["ซีพียู & คอร์", "อุณหภูมิ", "การใช้งาน", "ความเร็วคอร์", "กำลังไฟ"],
+        p2: ["เครือข่าย", "ที่อยู่ IP", "ความหน่วง", "แพ็กเกจ RX", "แพ็กเกจ TX"],
+        p3: ["แอคชูเอเตอร์", "ข้อต่อ 1", "ข้อต่อ 2", "ข้อต่อ 3", "แรงบิด"],
+        p4: ["หน่วยความจำ & พลังงาน", "แรม", "แบตเตอรี่", "แรงดันไฟ", "กระแสไฟ"],
+        p5: ["เซนเซอร์ & วิชั่น", "LiDAR", "กล้อง", "เซนเซอร์ IMU", "อัลตราโซนิก"],
+        p6: ["โหมดควบคุม", "โหมดควบคุม", "หยุดฉุกเฉิน", "เป้าหมาย", "ความเร็ว"]
+      },
+      id: {
+        sysStatus: "HK_ROBOT SISTEM // STATUS: AKTIF // SISTEM: OK",
+        consoleTitle: "LOG KONSOL REALTIME SISTEM",
+        p1: ["CPU & CORE", "Suhu", "Penggunaan", "Clock", "Daya"],
+        p2: ["JARINGAN", "Alamat IP", "Latensi", "Paket RX", "Paket TX"],
+        p3: ["AKTUATOR", "Sendi 1", "Sendi 2", "Sendi 3", "Torsi"],
+        p4: ["MEMORI & DAYA", "RAM", "Baterai", "Tegangan", "Arus"],
+        p5: ["SENSOR & VISI", "LiDAR", "Kamera", "Sensor IMU", "Ultrasonik"],
+        p6: ["MODE KONTROL", "Mode Kontrol", "E-STOP", "Target", "Kecepatan"]
+      },
+      de: {
+        sysStatus: "HK_ROBOT SYSTEM // STATUS: AKTIV // SYSTEM: OK",
+        consoleTitle: "SYSTEM-ECHTZEIT-KONSOLENPROTOKOLLE",
+        p1: ["CPU & KERN", "Temp", "Auslastung", "Takt", "Leistung"],
+        p2: ["NETZWERK", "IP-Adresse", "Latenz", "RX-Paket", "TX-Paket"],
+        p3: ["AKTOREN", "Gelenk 1", "Gelenk 2", "Gelenk 3", "Drehmoment"],
+        p4: ["SPEICHER & STROM", "RAM", "Batterie", "Spannung", "Strom"],
+        p5: ["SENSOREN & VISION", "LiDAR", "Kamera", "IMU-Sensor", "Ultraschall"],
+        p6: ["STEUERUNGSMODUS", "Steuerungsmodus", "E-STOPP", "Ziel", "Geschwindigkeit"]
+      },
+      it: {
+        sysStatus: "HK_ROBOT SISTEMA // STATO: ATTIVO // SISTEMA: OK",
+        consoleTitle: "LOG DI CONSOLE IN TEMPO REALE DEL SISTEMA",
+        p1: ["CPU E CORE", "Temp", "Utilizzo", "Clock", "Potenza"],
+        p2: ["RETE", "Indirizzo IP", "Latenza", "Pacchetto RX", "Pacchetto TX"],
+        p3: ["ATTUATORI", "Giunto 1", "Giunto 2", "Giunto 3", "Coppia"],
+        p4: ["MEMORIA E ALIMENTAZIONE", "RAM", "Batteria", "Tensione", "Corrente"],
+        p5: ["SENSORI E VISIONE", "LiDAR", "Telecamera", "Sensore IMU", "Ultrasuoni"],
+        p6: ["MODALITÀ DI CONTROLLO", "Modalità Controllo", "E-STOP", "Obiettivo", "Velocità"]
+      },
+      fr: {
+        sysStatus: "HK_ROBOT SYSTÈME // STATUT: ACTIF // SYSTÈME: OK",
+        consoleTitle: "JOURNAUX DE CONSOLE EN TEMPS RÉEL DU SYSTÈME",
+        p1: ["CPU ET CŒUR", "Temp", "Utilisation", "Horloge", "Puissance"],
+        p2: ["RÉSEAU", "Adresse IP", "Latence", "Paquet RX", "Paquet TX"],
+        p3: ["ACTIONNEURS", "Articulation 1", "Articulation 2", "Articulation 3", "Couple"],
+        p4: ["MÉMOIRE ET ALIMENTATION", "RAM", "Batterie", "Tension", "Courant"],
+        p5: ["CAPTEURS ET VISION", "LiDAR", "Caméra", "Capteur IMU", "Ultrasons"],
+        p6: ["MODE DE CONTRÔLE", "Mode de Contrôle", "E-STOP", "Cible", "Vitesse"]
+      }
+    };
 
-  <!-- ASSET_STATUS -->
-  <div class="panel">
-    <h4 id="lbl-asset">ASSET_DIAGNOSTICS</h4>
-    <div class="data-line"><span>HK-01_DRONE</span><span class="val">ONLINE</span></div>
-    <div class="data-line"><span>HK-02_GROUND</span><span class="val">IDLE</span></div>
-    <div class="data-line"><span>HK-03_UAM</span><span class="val">MNT_REQ</span></div>
-    <div class="data-line"><span>HK-04_SENTRY</span><span class="val">OFFLINE</span></div>
-    <div class="data-line"><span>HK-05_CARGO</span><span class="val">ACTIVE</span></div>
-    <div class="data-line"><span>HUB_SYNC</span><span class="val">OK</span></div>
-  </div>
+    function changeLanguage(lang) {
+      const data = i18n[lang];
+      if (!data) return;
 
-  <!-- SECURITY -->
-  <div class="panel">
-    <h4 id="lbl-sec">SECURITY_PROTOCOL</h4>
-    <div class="data-line"><span>FIREWALL</span><span class="val">ENABLED</span></div>
-    <div class="data-line"><span>ACCESS_LVL</span><span class="val">ROOT_ADMIN</span></div>
-    <div class="data-line"><span>BLOCK_LIST</span><span class="val">42_IPS</span></div>
-    <div class="data-line"><span>AUTH_TOKEN</span><span class="val">0xAF321</span></div>
-    <div class="data-line"><span>SSL_CERT</span><span class="val">VALID</span></div>
-  </div>
+      document.getElementById('sys-status').innerText = data.sysStatus;
+      document.getElementById('console-title').innerText = data.consoleTitle;
 
-  <!-- POWER_MGMT -->
-  <div class="panel">
-    <h4 id="lbl-pwr">POWER_MANAGEMENT</h4>
-    <div class="data-line"><span>MAIN_GRID</span><span class="val">98%</span></div>
-    <div class="data-line"><span>UPS_BAT</span><span class="val">100%</span></div>
-    <div class="data-line"><span>PWR_DRAIN</span><span class="val">450W</span></div>
-    <div class="data-line"><span>CELL_BAL</span><span class="val">STABLE</span></div>
-  </div>
-
-  <!-- EVENT_LOGS -->
-  <div class="panel" style="grid-column: span 1; overflow-y: auto;">
-    <h4 id="lbl-log">EVENT_LOGS</h4>
-    <div style="font-size: 8px;">
-      [00:01:02] INITIALIZING_MODULE_KRNL<br>
-      [00:01:05] MEM_ADDRESS_0x000F_MAPPED<br>
-      [00:01:10] HK-01_CONNECT_REQUEST<br>
-      [00:01:12] AUTH_ACCEPTED_KEY_8829<br>
-      [00:01:15] NETWORK_SYNC_SUCCESSFUL<br>
-      [00:01:20] SECURITY_LEVEL_INCREMENTED<br>
-      [00:01:22] WATCHDOG_TIMER_RESET<br>
-      [00:01:25] ASSET_DIAG_COMPLETE<br>
-    </div>
-  </div>
-</div>
-
-<script>
-  const i18n = {
-    ko: { sys: "시스템 정보", net: "네트워크", asset: "자산 상태", sec: "보안 모듈", pwr: "전력 관리", log: "실시간 로그" },
-    en: { sys: "SYSTEM_VITALS", net: "NETWORK_TOPOLOGY", asset: "ASSET_DIAGNOSTICS", sec: "SECURITY_PROTOCOL", pwr: "POWER_MANAGEMENT", log: "EVENT_LOGS" }
-  };
-  function updateUI(lang) {
-    const d = i18n[lang];
-    document.getElementById('lbl-sys').innerText = d.sys;
-    document.getElementById('lbl-net').innerText = d.net;
-    document.getElementById('lbl-asset').innerText = d.asset;
-    document.getElementById('lbl-sec').innerText = d.sec;
-    document.getElementById('lbl-pwr').innerText = d.pwr;
-    document.getElementById('lbl-log').innerText = d.log;
-  }
-</script>
+      for (let i = 1; i <= 6; i++) {
+        const p = data['p' + i];
+        document.getElementById(`p${i}-title`).innerText = p[0];
+        document.getElementById(`p${i}-k1`).innerText = p[1];
+        document.getElementById(`p${i}-k2`).innerText = p[2];
+        document.getElementById(`p${i}-k3`).innerText = p[3];
+        document.getElementById(`p${i}-k4`).innerText = p[4];
+      }
+    }
+  </script>
 </body>
 </html>
