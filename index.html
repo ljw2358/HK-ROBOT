@@ -1,19 +1,19 @@
-출발 언어영어도착 언어한국어번역하기
-
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="notranslate" translate="no">
 <head>
   <meta charset="UTF-8">
+  <meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HK-ROBOT TERMINAL</title>
   
   <style>
-    /* 기본 테마: 터미널 사이버 폰트 & 블랙/그린 콘셉트 */
+    /* 화면 깨짐 방지 및 기본 레이아웃 고정 */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: 'Courier New', 'Consolas', monospace;
+      direction: ltr !important;
     }
 
     body {
@@ -21,26 +21,25 @@
       color: #00ff66;
       height: 100vh;
       overflow: hidden;
-      padding: 15px;
+      padding: 12px;
     }
 
-    /* 전체 레이아웃 (높이 100% 꽉 채움) */
     .terminal-container {
       display: flex;
       flex-direction: column;
       height: 100%;
-      border: 1px solid #00ff66;
+      border: 2px solid #00ff66;
       padding: 10px;
       gap: 10px;
       box-shadow: 0 0 15px rgba(0, 255, 102, 0.2);
     }
 
-    /* 1. 상단 스테이터스 바 & 16개국 언어 선택기 */
+    /* 상단 스테이터스 바 */
     .status-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #003311;
+      background: #00220a;
       padding: 8px 15px;
       border: 1px solid #00ff66;
       font-weight: bold;
@@ -51,9 +50,10 @@
       background: #001a08;
       color: #00ff66;
       border: 1px solid #00ff66;
-      padding: 5px 12px;
+      padding: 5px 10px;
       border-radius: 4px;
-      font-family: inherit;
+      font-family: sans-serif;
+      font-size: 0.9rem;
       outline: none;
       cursor: pointer;
     }
@@ -63,18 +63,18 @@
       color: #00ff66;
     }
 
-    /* 2. 대시보드 그리드 영역 (화면 상단 분할 패널) */
+    /* 대시보드 그리드 */
     .dashboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 10px;
-      flex: 2; /* 비율 조정 */
+      flex: 2;
     }
 
     .panel {
       border: 1px solid #00ff66;
-      background: rgba(0, 20, 5, 0.6);
+      background: rgba(0, 20, 5, 0.7);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -87,6 +87,7 @@
       font-weight: bold;
       font-size: 0.85rem;
       text-transform: uppercase;
+      text-align: left;
     }
 
     .panel-body {
@@ -94,15 +95,16 @@
       font-size: 0.85rem;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       overflow-y: auto;
     }
 
     .data-row {
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px dashed rgba(0, 255, 102, 0.2);
-      padding-bottom: 2px;
+      align-items: center;
+      border-bottom: 1px dashed rgba(0, 255, 102, 0.25);
+      padding-bottom: 3px;
     }
 
     .data-value {
@@ -110,7 +112,7 @@
       font-weight: bold;
     }
 
-    /* 3. 하단 실시간 시스템 터미널 로그 (비어있던 하단부 전체 채움) */
+    /* 하단 실시간 콘솔 로그 */
     .console-section {
       flex: 1;
       border: 1px solid #00ff66;
@@ -127,6 +129,7 @@
       overflow-y: auto;
       flex: 1;
       line-height: 1.4;
+      text-align: left;
     }
 
     .log-entry {
@@ -134,112 +137,102 @@
     }
 
     .log-time {
-      color: #888;
+      color: #666;
     }
   </style>
 </head>
-<body>
+<body class="notranslate">
 
   <div class="terminal-container">
 
-    <!-- 상단 바: 시스템 정보 + 16개국 언어 선택기 -->
     <header class="status-bar">
-      <div id="sys-status">HK_ROBOT_SYSTEM // STATUS: ACTIVE // SYSTEM: OK</div>
+      <div id="sys-status">HK_ROBOT SYSTEM // STATUS: ACTIVE // SYSTEM: OK</div>
       <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
-        <option value="ko" selected>한국어 (KR)</option>
-        <option value="en">English (US)</option>
-        <option value="zh">中文 (CN)</option>
-        <option value="ar">العربية (AR)</option>
-        <option value="hi">हिन्दी (IN)</option>
-        <option value="es">Español (ES)</option>
-        <option value="pt">Português (BR)</option>
-        <option value="uk">Українська (UA)</option>
-        <option value="ja">日本語 (JP)</option>
-        <option value="ru">Русский (RU)</option>
-        <option value="vi">Tiếng Việt (VN)</option>
-        <option value="th">ไทย (TH)</option>
-        <option value="id">Bahasa Indonesia (ID)</option>
-        <option value="de">Deutsch (DE)</option>
-        <option value="it">Italiano (IT)</option>
-        <option value="fr">Français (FR)</option>
+        <option value="ko" selected>🇰🇷 한국어</option>
+        <option value="en">🇺🇸 English</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ar">🇸🇦 العربية</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="pt">🇧🇷 Português</option>
+        <option value="uk">🇺🇦 Українська</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="th">🇹🇭 ไทย</option>
+        <option value="id">🇮🇩 Bahasa Indonesia</option>
+        <option value="ps">🇵🇸 فلسطين</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="fr">🇫🇷 Français</option>
       </select>
     </header>
 
-    <!-- 대시보드 6분할 패널 -->
     <main class="dashboard-grid">
-
-      <!-- 패널 1: CPU & 코어 -->
       <div class="panel">
         <div class="panel-header" id="p1-title">CPU & CORE</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p1-k1">온도 (CPU Temp)</span><span class="data-value">42.5°C</span></div>
-          <div class="data-row"><span id="p1-k2">사용률 (Usage)</span><span class="data-value">18.4%</span></div>
-          <div class="data-row"><span id="p1-k3">클럭 (Clock)</span><span class="data-value">3.4 GHz</span></div>
-          <div class="data-row"><span id="p1-k4">전력 (Power)</span><span class="data-value">45W</span></div>
+          <div class="data-row"><span id="p1-k1">온도</span><span class="data-value">42.5°C</span></div>
+          <div class="data-row"><span id="p1-k2">사용률</span><span class="data-value">18.4%</span></div>
+          <div class="data-row"><span id="p1-k3">클럭</span><span class="data-value">3.4 GHz</span></div>
+          <div class="data-row"><span id="p1-k4">전력</span><span class="data-value">45W</span></div>
         </div>
       </div>
 
-      <!-- 패널 2: 네트워크/연결 -->
       <div class="panel">
         <div class="panel-header" id="p2-title">NETWORK</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p2-k1">IP 주소 (IP Address)</span><span class="data-value">192.168.0.100</span></div>
-          <div class="data-row"><span id="p2-k2">지연율 (Latency)</span><span class="data-value">2ms</span></div>
-          <div class="data-row"><span id="p2-k3">패킷 수신 (RX)</span><span class="data-value">124.5 MB</span></div>
-          <div class="data-row"><span id="p2-k4">패킷 송신 (TX)</span><span class="data-value">88.2 MB</span></div>
+          <div class="data-row"><span id="p2-k1">IP 주소</span><span class="data-value">192.168.0.100</span></div>
+          <div class="data-row"><span id="p2-k2">지연율</span><span class="data-value">2ms</span></div>
+          <div class="data-row"><span id="p2-k3">패킷 수신</span><span class="data-value">124.5 MB</span></div>
+          <div class="data-row"><span id="p2-k4">패킷 송신</span><span class="data-value">88.2 MB</span></div>
         </div>
       </div>
 
-      <!-- 패널 3: 액추에이터/모터 -->
       <div class="panel">
         <div class="panel-header" id="p3-title">ACTUATORS</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p3-k1">관절 1 (Joint 1)</span><span class="data-value">0.0° / OK</span></div>
-          <div class="data-row"><span id="p3-k2">관절 2 (Joint 2)</span><span class="data-value">+15.2° / OK</span></div>
-          <div class="data-row"><span id="p3-k3">관절 3 (Joint 3)</span><span class="data-value">-45.8° / OK</span></div>
-          <div class="data-row"><span id="p3-k4">토크 (Torque)</span><span class="data-value">12.4 Nm</span></div>
+          <div class="data-row"><span id="p3-k1">관절 1</span><span class="data-value">0.0° / OK</span></div>
+          <div class="data-row"><span id="p3-k2">관절 2</span><span class="data-value">+15.2° / OK</span></div>
+          <div class="data-row"><span id="p3-k3">관절 3</span><span class="data-value">-45.8° / OK</span></div>
+          <div class="data-row"><span id="p3-k4">토크</span><span class="data-value">12.4 Nm</span></div>
         </div>
       </div>
 
-      <!-- 패널 4: 메모리/배터리 -->
       <div class="panel">
         <div class="panel-header" id="p4-title">MEMORY & POWER</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p4-k1">RAM 할당 (RAM)</span><span class="data-value">4.2GB / 16GB</span></div>
-          <div class="data-row"><span id="p4-k2">배터리 (Battery)</span><span class="data-value">98% [Charging]</span></div>
-          <div class="data-row"><span id="p4-k3">전압 (Voltage)</span><span class="data-value">24.1V</span></div>
-          <div class="data-row"><span id="p4-k4">전류 (Current)</span><span class="data-value">3.2A</span></div>
+          <div class="data-row"><span id="p4-k1">RAM 할당</span><span class="data-value">4.2GB / 16GB</span></div>
+          <div class="data-row"><span id="p4-k2">배터리</span><span class="data-value">98% [Charging]</span></div>
+          <div class="data-row"><span id="p4-k3">전압</span><span class="data-value">24.1V</span></div>
+          <div class="data-row"><span id="p4-k4">전류</span><span class="data-value">3.2A</span></div>
         </div>
       </div>
 
-      <!-- 패널 5: 비전/센서 -->
       <div class="panel">
         <div class="panel-header" id="p5-title">SENSORS & VISION</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p5-k1">라이다 (LiDAR)</span><span class="data-value">ACTIVE</span></div>
-          <div class="data-row"><span id="p5-k2">카메라 (Depth Cam)</span><span class="data-value">60 FPS</span></div>
+          <div class="data-row"><span id="p5-k1">라이다</span><span class="data-value">ACTIVE</span></div>
+          <div class="data-row"><span id="p5-k2">카메라</span><span class="data-value">60 FPS</span></div>
           <div class="data-row"><span id="p5-k3">IMU 센서</span><span class="data-value">STABLE</span></div>
-          <div class="data-row"><span id="p5-k4">초음파 (Ultrasonic)</span><span class="data-value">NORMAL</span></div>
+          <div class="data-row"><span id="p5-k4">초음파</span><span class="data-value">NORMAL</span></div>
         </div>
       </div>
 
-      <!-- 패널 6: 로봇 제어 상태 -->
       <div class="panel">
         <div class="panel-header" id="p6-title">CONTROL MODE</div>
         <div class="panel-body">
-          <div class="data-row"><span id="p6-k1">제어 모드 (Mode)</span><span class="data-value">AUTO_NAV</span></div>
-          <div class="data-row"><span id="p6-k2">비상 정지 (E-STOP)</span><span class="data-value" style="color: #00ff66;">OFF</span></div>
-          <div class="data-row"><span id="p6-k3">목적지 (Target)</span><span class="data-value">WAYPOINT_04</span></div>
-          <div class="data-row"><span id="p6-k4">동작 속도 (Speed)</span><span class="data-value">1.2 m/s</span></div>
+          <div class="data-row"><span id="p6-k1">제어 모드</span><span class="data-value">AUTO_NAV</span></div>
+          <div class="data-row"><span id="p6-k2">비상 정지</span><span class="data-value" style="color: #00ff66;">OFF</span></div>
+          <div class="data-row"><span id="p6-k3">목적지</span><span class="data-value">WAYPOINT_04</span></div>
+          <div class="data-row"><span id="p6-k4">동작 속도</span><span class="data-value">1.2 m/s</span></div>
         </div>
       </div>
-
     </main>
 
-    <!-- 하단 영역: 실시간 콘솔 모니터링 로그 (화면 하단을 꽉 채워줌) -->
     <footer class="console-section">
-      <div class="panel-header" id="console-title">SYSTEM REALTIME CONSOLE LOGS</div>
-      <div class="console-log" id="consoleLog">
+      <div class="panel-header" id="console-title">시스템 실시간 콘솔 로그</div>
+      <div class="console-log">
         <div class="log-entry"><span class="log-time">[00:00:01]</span> HK-ROBOT System Initialization Started.</div>
         <div class="log-entry"><span class="log-time">[00:00:02]</span> Loading modules... CPU, Network, Sensors OK.</div>
         <div class="log-entry"><span class="log-time">[00:00:03]</span> Actuators calibrated successfully.</div>
@@ -250,7 +243,6 @@
 
   </div>
 
-  <!-- 16개국 번역 및 자바스크립트 -->
   <script>
     const i18n = {
       ko: {
@@ -383,6 +375,16 @@
         p5: ["SENSOR & VISI", "LiDAR", "Kamera", "Sensor IMU", "Ultrasonik"],
         p6: ["MODE KONTROL", "Mode Kontrol", "E-STOP", "Target", "Kecepatan"]
       },
+      ps: {
+        sysStatus: "HK_ROBOT النظام // الحالة: نشط // النظام: ممتاز",
+        consoleTitle: "سجل وحدة التحكم المباشر للنظام",
+        p1: ["المعالج والنواة", "الحرارة", "الاستخدام", "السرعة", "الطاقة"],
+        p2: ["الشبكة", "عنوان IP", "التأخير", "البيانات المستلمة", "البيانات المرسلة"],
+        p3: ["المحرّكات", "المفصل 1", "المفصل 2", "المفصل 3", "العزم"],
+        p4: ["الذاكرة والطاقة", "الذاكرة", "البطارية", "الجهد", "التيار"],
+        p5: ["المستشعرات والرؤية", "LIDAR", "الكاميرا", "مستشعر IMU", "الموجات فوق الصوتية"],
+        p6: ["وضع التحكم", "وضع التحكم", "إيقاف الطوارئ", "الهدف", "السرعة"]
+      },
       de: {
         sysStatus: "HK_ROBOT SYSTEM // STATUS: AKTIV // SYSTEM: OK",
         consoleTitle: "SYSTEM-ECHTZEIT-KONSOLENPROTOKOLLE",
@@ -434,3 +436,4 @@
   </script>
 </body>
 </html>
+
