@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="doc-title">HK NEXUS AI 코어 대시보드</title>
+    <title id="doc-title">HK ROBOT 시스템 대시보드</title>
     <style>
         :root {
             --bg-color: #060913;
@@ -12,7 +12,7 @@
             --text-color: #ffffff;
             --text-secondary: #94a3b8;
             
-            /* 화려한 네온 칼라 팔레트 */
+            /* SF 네온 칼라 */
             --neon-cyan: #00f0ff;
             --neon-pink: #ff007f;
             --neon-green: #00ff88;
@@ -37,7 +37,7 @@
             min-height: 100vh;
         }
 
-        /* Responsive Header */
+        /* Header */
         .header {
             display: flex;
             flex-wrap: wrap;
@@ -95,7 +95,7 @@
             box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
         }
 
-        /* Dashboard Grid */
+        /* Grid Layout */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -123,8 +123,8 @@
             backdrop-filter: blur(12px);
         }
 
-        /* 칼라풀 NEXUS AI 구체 카드 */
-        .nexus-card {
+        /* Robot Tracking Card */
+        .robot-card {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -135,7 +135,7 @@
             box-shadow: 0 0 25px rgba(168, 85, 247, 0.15);
         }
 
-        .nexus-title {
+        .robot-title {
             position: absolute;
             top: 20px;
             left: 20px;
@@ -146,7 +146,7 @@
             text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
         }
 
-        .nexus-circle {
+        .robot-circle {
             width: 190px;
             height: 190px;
             border-radius: 50%;
@@ -165,7 +165,7 @@
             to { transform: rotate(360deg); }
         }
 
-        .nexus-core-dot {
+        .robot-core-dot {
             width: 12px;
             height: 12px;
             background-color: var(--neon-pink);
@@ -173,7 +173,7 @@
             box-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-pink);
         }
 
-        .nexus-footer {
+        .robot-footer {
             margin-top: 25px;
             font-size: 0.85rem;
             color: var(--neon-cyan);
@@ -181,7 +181,7 @@
             letter-spacing: 1px;
         }
 
-        /* 칼라풀 개별 상태 카드들 */
+        /* Status Cards */
         .status-stack {
             display: flex;
             flex-direction: column;
@@ -203,16 +203,15 @@
             transform: translateY(-2px);
         }
 
-        /* 각 카드별 다채로운 칼라 네온 효과 */
         .card-status {
             border: 1px solid rgba(0, 255, 136, 0.4);
             box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);
         }
-        .card-sync {
+        .card-speed {
             border: 1px solid rgba(0, 240, 255, 0.4);
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
         }
-        .card-latency {
+        .card-battery {
             border: 1px solid rgba(255, 204, 0, 0.4);
             box-shadow: 0 0 15px rgba(255, 204, 0, 0.15);
         }
@@ -250,7 +249,7 @@
 <body>
 
     <header class="header">
-        <h1 id="title">HK NEXUS AI 코어 대시보드</h1>
+        <h1 id="title">HK ROBOT 시스템 대시보드</h1>
         <div class="header-controls">
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="ko" selected>한국어 (KR)</option>
@@ -276,28 +275,28 @@
     </header>
 
     <main class="dashboard-grid">
-        <section class="card nexus-card">
-            <div class="nexus-title" id="nexus-title">NEXUS AI 신경망 매핑</div>
-            <div class="nexus-circle">
-                <div class="nexus-core-dot"></div>
+        <section class="card robot-card">
+            <div class="robot-title" id="robot-title">실시간 레이더 스코프</div>
+            <div class="robot-circle">
+                <div class="robot-core-dot"></div>
             </div>
-            <div class="nexus-footer" id="nexus-footer">시스템 ID: HK-NEXUS-01</div>
+            <div class="robot-footer" id="robot-footer">추적 중: HK-ROBOT-01</div>
         </section>
 
         <div class="status-stack">
             <section class="status-card card-status">
-                <div class="status-label" id="lbl-status">NEXUS 상태</div>
-                <div class="status-value val-green" id="val-status">ONLINE / STABLE</div>
+                <div class="status-label" id="lbl-status">시스템 상태</div>
+                <div class="status-value val-green" id="val-status">ACTIVE</div>
             </section>
 
-            <section class="status-card card-sync">
-                <div class="status-label" id="lbl-sync">신경망 동기화율</div>
-                <div class="status-value val-cyan" id="val-sync">99.8 %</div>
+            <section class="status-card card-speed">
+                <div class="status-label" id="lbl-speed">운행 속도</div>
+                <div class="status-value val-cyan" id="val-speed">1.2 m/s</div>
             </section>
 
-            <section class="status-card card-latency">
-                <div class="status-label" id="lbl-latency">데이터 레이턴시</div>
-                <div class="status-value val-yellow" id="val-latency">1.2 ms</div>
+            <section class="status-card card-battery">
+                <div class="status-label" id="lbl-battery">배터리</div>
+                <div class="status-value val-yellow" id="val-battery">92 %</div>
             </section>
         </div>
     </main>
@@ -305,207 +304,207 @@
     <script>
         const translations = {
             ko: {
-                title: "HK NEXUS AI 코어 대시보드",
-                nexusTitle: "NEXUS AI 신경망 매핑",
-                nexusFooter: "시스템 ID: HK-NEXUS-01",
-                lblStatus: "NEXUS 상태",
-                valStatus: "ONLINE / STABLE",
-                lblSync: "신경망 동기화율",
-                valSync: "99.8 %",
-                lblLatency: "데이터 레이턴시",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT 시스템 대시보드",
+                robotTitle: "실시간 레이더 스코프",
+                robotFooter: "추적 중: HK-ROBOT-01",
+                lblStatus: "시스템 상태",
+                valStatus: "ACTIVE",
+                lblSpeed: "운행 속도",
+                valSpeed: "1.2 m/s",
+                lblBattery: "배터리",
+                valBattery: "92 %",
                 userMenu: "관리자 (Admin)"
             },
             en: {
-                title: "HK NEXUS AI Core Dashboard",
-                nexusTitle: "NEXUS Neural Network Mapping",
-                nexusFooter: "System ID: HK-NEXUS-01",
-                lblStatus: "NEXUS Status",
-                valStatus: "ONLINE / STABLE",
-                lblSync: "Neural Sync Rate",
-                valSync: "99.8 %",
-                lblLatency: "Data Latency",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT System Dashboard",
+                robotTitle: "Real-time Radar Scope",
+                robotFooter: "Tracking: HK-ROBOT-01",
+                lblStatus: "System Status",
+                valStatus: "ACTIVE",
+                lblSpeed: "Operating Speed",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Battery",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             zh: {
-                title: "HK NEXUS AI 核心仪表板",
-                nexusTitle: "NEXUS 神经网络映射",
-                nexusFooter: "系统 ID: HK-NEXUS-01",
-                lblStatus: "NEXUS 状态",
-                valStatus: "在线 / 稳定",
-                lblSync: "神经网络同步率",
-                valSync: "99.8 %",
-                lblLatency: "数据延迟",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT 系统仪表板",
+                robotTitle: "实时雷达显示屏",
+                robotFooter: "追踪中: HK-ROBOT-01",
+                lblStatus: "系统状态",
+                valStatus: "运行中 (ACTIVE)",
+                lblSpeed: "运行速度",
+                valSpeed: "1.2 m/s",
+                lblBattery: "电池电量",
+                valBattery: "92 %",
                 userMenu: "管理员 (Admin)"
             },
             ar: {
-                title: "لوحة تحكم HK NEXUS الذكاء الاصطناعي",
-                nexusTitle: "رسم خرائط الشبكة العصبي NEXUS",
-                nexusFooter: "معرف النظام: HK-NEXUS-01",
-                lblStatus: "حالة NEXUS",
-                valStatus: "متصل / مستقر",
-                lblSync: "معدل مزامنة الشبكة",
-                valSync: "99.8 %",
-                lblLatency: "زمن انتقال البيانات",
-                valLatency: "1.2 ms",
+                title: "لوحة تحكم نظام HK ROBOT",
+                robotTitle: "نطاق الرادار المباشر",
+                robotFooter: "جاري التتبع: HK-ROBOT-01",
+                lblStatus: "حالة النظام",
+                valStatus: "نشط (ACTIVE)",
+                lblSpeed: "سرعة التشغيل",
+                valSpeed: "1.2 m/s",
+                lblBattery: "البطارية",
+                valBattery: "92 %",
                 userMenu: "المسؤول (Admin)"
             },
             hi: {
-                title: "HK NEXUS AI कोर डैशबोर्ड",
-                nexusTitle: "NEXUS न्यूरल नेटवर्क मैपिंग",
-                nexusFooter: "सिस्टम आईडी: HK-NEXUS-01",
-                lblStatus: "NEXUS स्थिति",
-                valStatus: "ऑनलाइन / स्थिर",
-                lblSync: "न्यूरल सिंक दर",
-                valSync: "99.8 %",
-                lblLatency: "डेटा लेटेंसी",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT सिस्टम डैशबोर्ड",
+                robotTitle: "रियल-टाइम रडार स्कोप",
+                robotFooter: "ट्रैकिंग: HK-ROBOT-01",
+                lblStatus: "सिस्टम स्थिति",
+                valStatus: "सक्रिय (ACTIVE)",
+                lblSpeed: "ऑपरेटिंग गति",
+                valSpeed: "1.2 m/s",
+                lblBattery: "बैटरी",
+                valBattery: "92 %",
                 userMenu: "प्रशासक (Admin)"
             },
             es: {
-                title: "Panel Core IA HK NEXUS",
-                nexusTitle: "Mapeo Red Neuronal NEXUS",
-                nexusFooter: "ID Sistema: HK-NEXUS-01",
-                lblStatus: "Estado NEXUS",
-                valStatus: "EN LÍNEA / ESTABLE",
-                lblSync: "Tasa Sincronización",
-                valSync: "99.8 %",
-                lblLatency: "Latencia de Datos",
-                valLatency: "1.2 ms",
+                title: "Panel del Sistema HK ROBOT",
+                robotTitle: "Alcance del Radar en Tiempo Real",
+                robotFooter: "Rastreando: HK-ROBOT-01",
+                lblStatus: "Estado del Sistema",
+                valStatus: "ACTIVO",
+                lblSpeed: "Velocidad de Operación",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Batería",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             pt_br: {
-                title: "Painel Core IA HK NEXUS",
-                nexusTitle: "Mapeamento Rede Neural NEXUS",
-                nexusFooter: "ID do Sistema: HK-NEXUS-01",
-                lblStatus: "Status NEXUS",
-                valStatus: "ONLINE / ESTÁVEL",
-                lblSync: "Taxa de Sincronização",
-                valSync: "99.8 %",
-                lblLatency: "Latência de Dados",
-                valLatency: "1.2 ms",
+                title: "Painel do Sistema HK ROBOT",
+                robotTitle: "Alcance do Radar em Tempo Real",
+                robotFooter: "Rastreando: HK-ROBOT-01",
+                lblStatus: "Status do Sistema",
+                valStatus: "ATIVO",
+                lblSpeed: "Velocidade de Operação",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Bateria",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             uk: {
-                title: "Панель HK NEXUS AI Core",
-                nexusTitle: "Картування нейромережі NEXUS",
-                nexusFooter: "ID системи: HK-NEXUS-01",
-                lblStatus: "Статус NEXUS",
-                valStatus: "ОНЛАЙН / СТАБІЛЬНО",
-                lblSync: "Синхронізація мережі",
-                valSync: "99.8 %",
-                lblLatency: "Затримка даних",
-                valLatency: "1.2 ms",
+                title: "Панель системы HK ROBOT",
+                robotTitle: "Радарний скоп у реальному часі",
+                robotFooter: "Відстеження: HK-ROBOT-01",
+                lblStatus: "Статус системи",
+                valStatus: "АКТИВНИЙ",
+                lblSpeed: "Робоча швидкість",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Батарея",
+                valBattery: "92 %",
                 userMenu: "Адмін"
             },
             ja: {
-                title: "HK NEXUS AI コアダッシュボード",
-                nexusTitle: "NEXUS ニューラルネットワークマッピング",
-                nexusFooter: "システム ID: HK-NEXUS-01",
-                lblStatus: "NEXUS ステータス",
-                valStatus: "ONLINE / STABLE",
-                lblSync: "ニューラル同期率",
-                valSync: "99.8 %",
-                lblLatency: "データレイテンシ",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT システムダッシュボード",
+                robotTitle: "リアルタイムレーダースコープ",
+                robotFooter: "追跡中: HK-ROBOT-01",
+                lblStatus: "システムステータス",
+                valStatus: "ACTIVE",
+                lblSpeed: "運行速度",
+                valSpeed: "1.2 m/s",
+                lblBattery: "バッテリー",
+                valBattery: "92 %",
                 userMenu: "管理者 (Admin)"
             },
             ru: {
-                title: "Панель HK NEXUS AI Core",
-                nexusTitle: "Картирование нейросети NEXUS",
-                nexusFooter: "ID системы: HK-NEXUS-01",
-                lblStatus: "Статус NEXUS",
-                valStatus: "ОНЛАЙН / СТАБИЛЬНО",
-                lblSync: "Синхронизация сети",
-                valSync: "99.8 %",
-                lblLatency: "Задержка данных",
-                valLatency: "1.2 ms",
+                title: "Панель системы HK ROBOT",
+                robotTitle: "Радарный скоп в реальном времени",
+                robotFooter: "Отслеживание: HK-ROBOT-01",
+                lblStatus: "Статус системы",
+                valStatus: "АКТИВЕН",
+                lblSpeed: "Рабочая скорость",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Батарея",
+                valBattery: "92 %",
                 userMenu: "Админ"
             },
             vi: {
-                title: "Bảng điều khiển HK NEXUS AI Core",
-                nexusTitle: "Sơ đồ mạng thần kinh NEXUS",
-                nexusFooter: "Mã hệ thống: HK-NEXUS-01",
-                lblStatus: "Trạng thái NEXUS",
-                valStatus: "TRỰC TUYẾN / ỔN ĐỊNH",
-                lblSync: "Tỷ lệ đồng bộ thần kinh",
-                valSync: "99.8 %",
-                lblLatency: "Độ trễ dữ liệu",
-                valLatency: "1.2 ms",
+                title: "Bảng điều khiển hệ thống HK ROBOT",
+                robotTitle: "Phạm vi Radar thời gian thực",
+                robotFooter: "Đang theo dõi: HK-ROBOT-01",
+                lblStatus: "Trạng thái hệ thống",
+                valStatus: "HOẠT ĐỘNG",
+                lblSpeed: "Tốc độ vận hành",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Pin",
+                valBattery: "92 %",
                 userMenu: "Quản trị viên"
             },
             th: {
-                title: "แผงควบคุม HK NEXUS AI Core",
-                nexusTitle: "การแมปโครงข่ายประสาท NEXUS",
-                nexusFooter: "รหัสระบบ: HK-NEXUS-01",
-                lblStatus: "สถานะ NEXUS",
-                valStatus: "ออนไลน์ / เสถียร",
-                lblSync: "อัตราซิงค์โครงข่าย",
-                valSync: "99.8 %",
-                lblLatency: "ความหน่วงข้อมูล",
-                valLatency: "1.2 ms",
+                title: "แผงควบคุมระบบ HK ROBOT",
+                robotTitle: "ขอบเขตเรดาร์แบบเรียลไทม์",
+                robotFooter: "กำลังติดตาม: HK-ROBOT-01",
+                lblStatus: "สถานะระบบ",
+                valStatus: "ใช้งานอยู่ (ACTIVE)",
+                lblSpeed: "ความเร็วการทำงาน",
+                valSpeed: "1.2 m/s",
+                lblBattery: "แบตเตอรี่",
+                valBattery: "92 %",
                 userMenu: "ผู้ดูแลระบบ (Admin)"
             },
             id: {
-                title: "Dasbor HK NEXUS AI Core",
-                nexusTitle: "Pemetaan Jaringan Saraf NEXUS",
-                nexusFooter: "ID Sistem: HK-NEXUS-01",
-                lblStatus: "Status NEXUS",
-                valStatus: "DARING / STABIL",
-                lblSync: "Tingkat Sinkronisasi",
-                valSync: "99.8 %",
-                lblLatency: "Latensi Data",
-                valLatency: "1.2 ms",
+                title: "Dasbor Sistem HK ROBOT",
+                robotTitle: "Cakupan Radar Real-time",
+                robotFooter: "Lacak: HK-ROBOT-01",
+                lblStatus: "Status Sistem",
+                valStatus: "AKTIF",
+                lblSpeed: "Kecepatan Operasi",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Baterai",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             ar_ps: {
-                title: "لوحة تحكم HK NEXUS الذكاء الاصطناعي",
-                nexusTitle: "رسم خرائط الشبكة العصبي NEXUS",
-                nexusFooter: "رمز النظام: HK-NEXUS-01",
-                lblStatus: "حالة NEXUS",
-                valStatus: "متصل / مستقر",
-                lblSync: "معدل مزامنة الشبكة",
-                valSync: "99.8 %",
-                lblLatency: "زمن انتقال البيانات",
-                valLatency: "1.2 ms",
+                title: "لوحة تحكم نظام HK ROBOT",
+                robotTitle: "نطاق الرادار المباشر",
+                robotFooter: "رمز التتبع: HK-ROBOT-01",
+                lblStatus: "حالة النظام",
+                valStatus: "نشط (ACTIVE)",
+                lblSpeed: "سرعة التشغيل",
+                valSpeed: "1.2 m/s",
+                lblBattery: "البطارية",
+                valBattery: "92 %",
                 userMenu: "المسؤول"
             },
             de: {
-                title: "HK NEXUS AI Core Dashboard",
-                nexusTitle: "NEXUS Neuronales Netzwerk-Mapping",
-                nexusFooter: "System-ID: HK-NEXUS-01",
-                lblStatus: "NEXUS Status",
-                valStatus: "ONLINE / STABIL",
-                lblSync: "Neuronale Synchro-Rate",
-                valSync: "99.8 %",
-                lblLatency: "Datenlatenz",
-                valLatency: "1.2 ms",
+                title: "HK ROBOT System-Dashboard",
+                robotTitle: "Echtzeit-Radarskop",
+                robotFooter: "Verfolgung: HK-ROBOT-01",
+                lblStatus: "Systemstatus",
+                valStatus: "AKTIV",
+                lblSpeed: "Betriebsgeschwindigkeit",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Batterie",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             it: {
-                title: "Dashboard Core IA HK NEXUS",
-                nexusTitle: "Mappatura Rete Neurale NEXUS",
-                nexusFooter: "ID Sistema: HK-NEXUS-01",
-                lblStatus: "Stato NEXUS",
-                valStatus: "ONLINE / STABILE",
-                lblSync: "Tasso Sincronizzazione",
-                valSync: "99.8 %",
-                lblLatency: "Latenza Dati",
-                valLatency: "1.2 ms",
+                title: "Dashboard Sistema HK ROBOT",
+                robotTitle: "Ambito Radar in Tempo Reale",
+                robotFooter: "Tracciamento: HK-ROBOT-01",
+                lblStatus: "Stato del Sistema",
+                valStatus: "ATTIVO",
+                lblSpeed: "Velocità Operativa",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Batteria",
+                valBattery: "92 %",
                 userMenu: "Admin"
             },
             fr: {
-                title: "Tableau de Bord HK NEXUS AI Core",
-                nexusTitle: "Cartographie Réseau Neuronal NEXUS",
-                nexusFooter: "ID Système: HK-NEXUS-01",
-                lblStatus: "Statut NEXUS",
-                valStatus: "EN LIGNE / STABLE",
-                lblSync: "Taux Synchro Neuronale",
-                valSync: "99.8 %",
-                lblLatency: "Latence des Données",
-                valLatency: "1.2 ms",
+                title: "Tableau de Bord Système HK ROBOT",
+                robotTitle: "Portée Radar en Temps Réel",
+                robotFooter: "Suivi: HK-ROBOT-01",
+                lblStatus: "Statut du Système",
+                valStatus: "ACTIF",
+                lblSpeed: "Vitesse d'Opération",
+                valSpeed: "1.2 m/s",
+                lblBattery: "Batterie",
+                valBattery: "92 %",
                 userMenu: "Admin"
             }
         };
@@ -515,14 +514,14 @@
 
             document.getElementById('doc-title').innerText = t.title;
             document.getElementById('title').innerText = t.title;
-            document.getElementById('nexus-title').innerText = t.nexusTitle;
-            document.getElementById('nexus-footer').innerText = t.nexusFooter;
+            document.getElementById('robot-title').innerText = t.robotTitle;
+            document.getElementById('robot-footer').innerText = t.robotFooter;
             document.getElementById('lbl-status').innerText = t.lblStatus;
             document.getElementById('val-status').innerText = t.valStatus;
-            document.getElementById('lbl-sync').innerText = t.lblSync;
-            document.getElementById('val-sync').innerText = t.valSync;
-            document.getElementById('lbl-latency').innerText = t.lblLatency;
-            document.getElementById('val-latency').innerText = t.valLatency;
+            document.getElementById('lbl-speed').innerText = t.lblSpeed;
+            document.getElementById('val-speed').innerText = t.valSpeed;
+            document.getElementById('lbl-battery').innerText = t.lblBattery;
+            document.getElementById('val-battery').innerText = t.valBattery;
             document.getElementById('user-menu').innerText = t.userMenu;
         }
     </script>
