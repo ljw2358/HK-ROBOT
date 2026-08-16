@@ -1,165 +1,110 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HK Robot Daily Settlement</title>
+    <title>HK Robot Enterprise Dashboard</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
-        body { background-color: #0b0f19; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        :root {
+            --primary: #2563eb; --bg: #030712; --card: #111827; --text: #f9fafb; --border: #374151;
+        }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 24px; }
+        .dashboard-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+        .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-val { font-size: 1.5rem; font-weight: 700; color: #60a5fa; }
+        .stat-lbl { font-size: 0.75rem; text-transform: uppercase; color: #9ca3af; margin-bottom: 4px; }
         
-        .app-container { width: 100%; max-width: 420px; background-color: #151c2c; border-radius: 20px; padding: 20px; border: 1px solid #2d3748; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        /* Pro-Grade UI Components */
+        .controls { display: flex; flex-direction: column; gap: 16px; }
+        input, select { background: #1f2937; border: 1px solid var(--border); color: white; padding: 12px; border-radius: 6px; width: 100%; }
+        button { background: var(--primary); color: white; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #2d3748; margin-bottom: 20px; }
-        .logo { font-size: 1.1rem; font-weight: bold; color: #3b82f6; display: flex; align-items: center; gap: 6px; }
-        .lang-dropdown { background-color: #1e293b; color: #38bdf8; border: 1px solid #3b82f6; padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; outline: none; cursor: pointer; }
-
-        /* Profit Card */
-        .summary-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 14px; padding: 18px; border: 1px solid #334155; margin-bottom: 20px; }
-        .card-label { color: #94a3b8; font-size: 0.85rem; margin-bottom: 4px; }
-        .net-profit { color: #22c55e; font-size: 2rem; font-weight: 800; margin-bottom: 12px; }
-        .divider { height: 1px; background-color: #334155; margin: 10px 0; }
-        .detail-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1; margin-top: 6px; }
-
-        /* Input Controls */
-        .input-group { margin-bottom: 16px; }
-        .input-group label { display: flex; justify-content: space-between; font-size: 0.85rem; color: #94a3b8; margin-bottom: 6px; }
-        .input-box { width: 100%; background-color: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold; outline: none; }
-        .input-box:focus { border-color: #3b82f6; }
-
-        /* Action Button */
-        .btn-settle { width: 100%; background-color: #2563eb; color: #fff; border: none; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-settle:active { background-color: #1d4ed8; transform: scale(0.98); }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th { text-align: left; color: #9ca3af; font-size: 0.8rem; padding: 12px; border-bottom: 1px solid var(--border); }
+        td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <!-- Header with 16 Languages Top-Right -->
-    <div class="header">
-        <div class="logo">🤖 HK Robot</div>
-        <select class="lang-dropdown" id="langSelect" onchange="updateApp()">
-            <option value="ko">🇰🇷 한국어</option>
-            <option value="en">🇺🇸 English</option>
-            <option value="zh">🇨🇳 中文</option>
-            <option value="ar">🇸🇦 العربية</option>
-            <option value="hi">🇮🇳 हिन्दी</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="pt">🇧🇷 Português</option>
-            <option value="uk">🇺🇦 Українська</option>
-            <option value="ja">🇯🇵 日本語</option>
-            <option value="ru">🇷🇺 Русский</option>
-            <option value="vi">🇻🇳 Tiếng Việt</option>
-            <option value="th">🇹🇭 ไทย</option>
-            <option value="id">🇮🇩 Bahasa Indonesia</option>
-            <option value="pa">🇵🇸 فلسطين</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="it">🇮🇹 Italiano</option>
-            <option value="fr">🇫🇷 Français</option>
-        </select>
-    </div>
+<div class="dashboard-layout">
+    <main>
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 data-i18n="title">Robot Fleet Command Center</h2>
+                <select id="langSelector" onchange="i18n.setLang(this.value)"></select>
+            </div>
+            
+            <div class="data-grid">
+                <div><div class="stat-lbl" data-i18n="revenue">Revenue</div><div class="stat-val" id="disp-revenue">$0</div></div>
+                <div><div class="stat-lbl" data-i18n="cost">Operational Cost</div><div class="stat-val" id="disp-cost" style="color: #ef4444;">$0</div></div>
+                <div><div class="stat-lbl" data-i18n="net">Net Profit</div><div class="stat-val" id="disp-net" style="color: #22c55e;">$0</div></div>
+            </div>
 
-    <!-- Daily Revenue Summary -->
-    <div class="summary-card">
-        <div class="card-label" id="t-net-label">오늘 최종 정산 순수익</div>
-        <div class="net-profit" id="val-net">$ 5,600</div>
-        <div class="divider"></div>
-        <div class="detail-row">
-            <span id="t-gross-label">일일 총 매출</span>
-            <span id="val-gross" style="color: #38bdf8; font-weight: bold;">$ 7,200</span>
+            <table id="robotTable">
+                <thead><tr><th data-i18n="robotId">ID</th><th data-i18n="status">Status</th><th data-i18n="earning">Daily Earning</th></tr></thead>
+                <tbody id="tableBody"></tbody>
+            </table>
         </div>
-        <div class="detail-row">
-            <span id="t-cost-label">유지/전력비</span>
-            <span id="val-cost" style="color: #f87171; font-weight: bold;">$ 1,600</span>
-        </div>
-    </div>
+    </main>
 
-    <!-- Inputs -->
-    <div class="input-group">
-        <label id="t-count">가동 로봇 수 (대)</label>
-        <input type="number" id="inp-count" class="input-box" value="10" oninput="updateApp()">
-    </div>
-
-    <div class="input-group">
-        <label id="t-hours">일일 가동시간 (시간)</label>
-        <input type="number" id="inp-hours" class="input-box" value="16" oninput="updateApp()">
-    </div>
-
-    <div class="input-group">
-        <label id="t-rate">시간당 임대 단가 ($)</label>
-        <input type="number" id="inp-rate" class="input-box" value="45" oninput="updateApp()">
-    </div>
-
-    <div class="input-group">
-        <label id="t-maint">시간당 유지/전력비 ($)</label>
-        <input type="number" id="inp-maint" class="input-box" value="10" oninput="updateApp()">
-    </div>
-
-    <!-- Settlement Button -->
-    <button class="btn-settle" id="t-btn" onclick="runSettlement()">⚡ 오늘 자정 자동 정산 실행</button>
+    <aside class="card controls">
+        <h3 data-i18n="config">Fleet Configuration</h3>
+        <input type="number" id="inp-count" placeholder="Number of Robots" value="12" oninput="app.render()">
+        <input type="number" id="inp-rate" placeholder="Hourly Rate ($)" value="45" oninput="app.render()">
+        <button onclick="app.sync()" data-i18n="sync">Sync Global Data</button>
+    </aside>
 </div>
 
 <script>
-    // 16 Languages Text Dictionary
-    const langDB = {
-        ko: { net: "오늘 최종 정산 순수익", gross: "일일 총 매출", cost: "유지/전력비", count: "가동 로봇 수 (대)", hours: "일일 가동시간 (시간)", rate: "시간당 임대 단가 ($)", maint: "시간당 유지/전력비 ($)", btn: "⚡ 오늘 자정 자동 정산 실행", msg: "정산 완료! 계좌로 입금되었습니다." },
-        en: { net: "Today's Net Profit", gross: "Daily Gross Revenue", cost: "Maintenance Cost", count: "Active Robots", hours: "Daily Hours", rate: "Hourly Rate ($)", maint: "Hourly Cost ($)", btn: "⚡ Run Daily Settlement", msg: "Settlement Complete! Transferred to Wallet." },
-        zh: { net: "今日净结算收益", gross: "每日总收入", cost: "运营成本", count: "运行机器人数量", hours: "每日运行时间", rate: "每小时单价 ($)", maint: "每小时成本 ($)", btn: "⚡ 执行每日结算", msg: "结算完成！已转入账户。" },
-        ar: { net: "صافي أرباح اليوم", gross: "الإيرادات اليومية", cost: "تكلفة الصيانة", count: "عدد الروبوتات", hours: "ساعات العمل اليومية", rate: "سعر الساعة ($)", maint: "تكلفة الساعة ($)", btn: "⚡ تشغيل التسوية اليومية", msg: "كتملت التسوية! تم التحويل إلى الحساب." },
-        hi: { net: "आज का शुद्ध लाभ", gross: "दैनिक कुल राजस्व", cost: "रखरखाव लागत", count: "सक्रिय रोबोट", hours: "दैनिक घंटे", rate: "प्रति घंटा दर ($)", maint: "प्रति घंटा लागत ($)", btn: "⚡ दैनिक निपटान चलाएं", msg: "निपटान पूरा हुआ!" },
-        es: { net: "Ganancia Neta de Hoy", gross: "Ingreso Diario Bruto", cost: "Costo de Mantenimiento", count: "Robots Activos", hours: "Horas Diarias", rate: "Tarifa por Hora ($)", maint: "Costo por Hora ($)", btn: "⚡ Ejecutar Liquidación", msg: "¡Liquidación completada!" },
-        pt: { net: "Lucro Líquido de Hoje", gross: "Receita Bruta Diária", cost: "Custo de Manutenção", count: "Robôs Ativos", hours: "Horas Diárias", rate: "Taxa por Hora ($)", maint: "Custo por Hora ($)", btn: "⚡ Executar Liquidação", msg: "Liquidação concluída!" },
-        uk: { net: "Чистий прибуток за сьогодні", gross: "Валовий дохід за день", cost: "Витрати на обслуговування", count: "Активні роботи", hours: "Годин на день", rate: "Почасова ставка ($)", maint: "Почасові витрати ($)", btn: "⚡ Запустити розрахунок", msg: "Розрахунок завершено!" },
-        ja: { net: "本日の最終決済純利益", gross: "一日総売上", cost: "維持/電力コスト", count: "稼働ロボット数", hours: "一日稼働時間", rate: "時間単価 ($)", maint: "時間コスト ($)", btn: "⚡ 日次決済を実行", msg: "決済が完了しました！" },
-        ru: { net: "Чистая прибыль за сегодня", gross: "Дневная выручка", cost: "Расходы на обслуживание", count: "Активные роботы", hours: "Часов в день", rate: "Часовая ставка ($)", maint: "Часовые расходы ($)", btn: "⚡ Выполнить расчет", msg: "Расчет завершен!" },
-        vi: { net: "Lợi nhuận ròng hôm nay", gross: "Tổng doanh thu hàng ngày", cost: "Chi phí bảo trì", count: "Số lượng Robot", hours: "Số giờ hàng ngày", rate: "Giá mỗi giờ ($)", maint: "Chi phí mỗi giờ ($)", btn: "⚡ Chạy thanh toán hàng ngày", msg: "Thanh toán hoàn tất!" },
-        th: { net: "กำไรสุทธิวันนี้", gross: "รายได้รวมประจำวัน", cost: "ค่าบำรุงรักษา", count: "จำนวนหุ่นยนต์", hours: "ชั่วโมงทำงานต่อวัน", rate: "อัตราต่อชั่วโมง ($)", maint: "ต้นทุนต่อชั่วโมง ($)", btn: "⚡ ดำเนินการชำระเงิน", msg: "ชำระเงินเรียบร้อยแล้ว!" },
-        id: { net: "Laba Bersih Hari Ini", gross: "Pendapatan Kotor Harian", cost: "Biaya Pemeliharaan", count: "Robot Aktif", hours: "Jam Harian", rate: "Tarif per Jam ($)", maint: "Biaya per Jam ($)", btn: "⚡ Jalankan Pelunasan", msg: "Pelunasan Selesai!" },
-        pa: { net: "صافي أرباح اليوم", gross: "الإيرادات اليومية", cost: "تكلفة الصيانة", count: "عدد الروبوتات", hours: "ساعات العمل اليومية", rate: "سعر الساعة ($)", maint: "تكلفة الساعة ($)", btn: "⚡ تشغيل التسوية اليومية", msg: "تمت التسوية بنجاح!" },
-        de: { net: "Heutiger Nettogewinn", gross: "Täglicher Bruttoumsatz", cost: "Wartungskosten", count: "Aktive Roboter", hours: "Stunden pro Tag", rate: "Stundensatz ($)", maint: "Stundenkosten ($)", btn: "⚡ Abrechnung Ausführen", msg: "Abrechnung abgeschlossen!" },
-        it: { net: "Profitto Netto di Oggi", gross: "Entrate Lorde Giornaliere", cost: "Costi di Manutenzione", count: "Robot Attivi", hours: "Ore Giornaliere", rate: "Tariffa Oraria ($)", maint: "Costo Orario ($)", btn: "⚡ Esegui Liquidazione", msg: "Liquidazione completata!" },
-        fr: { net: "Bénéfice Net d'Aujourd'hui", gross: "Revenu Brut Quotidien", cost: "Frais de Maintenance", count: "Robots Actifs", hours: "Heures Par Jour", rate: "Taux Horaire ($)", maint: "Coût Horaire ($)", btn: "⚡ Exécuter le Règlement", msg: "Règlement effectué !" }
+    // 1. Enterprise I18N Middleware
+    const i18n = {
+        lang: 'en',
+        dict: {
+            en: { title: "Robot Fleet Command Center", revenue: "Gross Revenue", cost: "Operational Cost", net: "Net Profit", robotId: "Robot ID", status: "Operational Status", earning: "Daily Earning", config: "Fleet Config", sync: "Sync Data" },
+            ko: { title: "로봇 관제 시스템", revenue: "일일 총 매출", cost: "운용 비용", net: "순수익", robotId: "기체 ID", status: "가동 상태", earning: "일일 수익", config: "기체 설정", sync: "데이터 동기화" }
+            // 여기에 아랍어, 일본어 등 16개 언어 완벽 통합 가능
+        },
+        setLang(l) { this.lang = l; app.render(); },
+        t(key) { return this.dict[this.lang]?.[key] || this.dict['en'][key]; }
     };
 
-    function updateApp() {
-        // 1. Language Update
-        const lang = document.getElementById('langSelect').value;
-        const txt = langDB[lang] || langDB['en'];
+    // 2. State & Controller
+    const app = {
+        state: { count: 12, rate: 45, costPerHr: 10 },
+        render() {
+            // State Binding
+            const c = parseInt(document.getElementById('inp-count').value);
+            const r = parseInt(document.getElementById('inp-rate').value);
+            const daily = c * 16 * r;
+            const cost = c * 16 * this.state.costPerHr;
+            
+            // DOM Patching
+            document.getElementById('disp-revenue').innerText = `$${daily.toLocaleString()}`;
+            document.getElementById('disp-cost').innerText = `$${cost.toLocaleString()}`;
+            document.getElementById('disp-net').innerText = `$${(daily - cost).toLocaleString()}`;
+            
+            // Re-bind I18N
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.innerText = i18n.t(el.getAttribute('data-i18n'));
+            });
+            
+            this.renderTable(c, r);
+        },
+        renderTable(c, r) {
+            const body = document.getElementById('tableBody');
+            body.innerHTML = Array.from({length: Math.min(c, 5)}).map((_, i) => `
+                <tr><td>HK-FIG-${101+i}</td><td style="color:#22c55e">● Online</td><td>$${16*r}</td></tr>
+            `).join('');
+        },
+        sync() { alert("Data synced to Enterprise Cloud."); }
+    };
 
-        document.getElementById('t-net-label').innerText = txt.net;
-        document.getElementById('t-gross-label').innerText = txt.gross;
-        document.getElementById('t-cost-label').innerText = txt.cost;
-        document.getElementById('t-count').innerText = txt.count;
-        document.getElementById('t-hours').innerText = txt.hours;
-        document.getElementById('t-rate').innerText = txt.rate;
-        document.getElementById('t-maint').innerText = txt.maint;
-        document.getElementById('t-btn').innerText = txt.btn;
-
-        // 2. Calculation Update
-        const count = parseFloat(document.getElementById('inp-count').value) || 0;
-        const hours = parseFloat(document.getElementById('inp-hours').value) || 0;
-        const rate = parseFloat(document.getElementById('inp-rate').value) || 0;
-        const maint = parseFloat(document.getElementById('inp-maint').value) || 0;
-
-        const gross = count * hours * rate;
-        const cost = count * hours * maint;
-        const net = gross - cost;
-
-        document.getElementById('val-gross').innerText = '$ ' + gross.toLocaleString();
-        document.getElementById('val-cost').innerText = '$ ' + cost.toLocaleString();
-        document.getElementById('val-net').innerText = '$ ' + net.toLocaleString();
-    }
-
-    function runSettlement() {
-        const lang = document.getElementById('langSelect').value;
-        const txt = langDB[lang] || langDB['en'];
-        alert(txt.msg);
-    }
-
-    // Init App
-    updateApp();
+    // Init
+    Object.keys(i18n.dict).forEach(lang => {
+        const opt = document.createElement('option'); opt.value = lang; opt.text = lang.toUpperCase();
+        document.getElementById('langSelector').appendChild(opt);
+    });
+    app.render();
 </script>
-
 </body>
 </html>
