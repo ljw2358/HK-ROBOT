@@ -1,136 +1,230 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>HK Global Robot Command Center | Enterprise Dashboard</title>
-    <style>
-        :root {
-            --bg: #030712; --panel: #111827; --accent: #2563eb; --text: #f9fafb; --dim: #9ca3af;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, sans-serif; }
-        body { background: var(--bg); color: var(--text); padding: 32px; display: flex; justify-content: center; }
-        
-        /* Layout Structure */
-        .dashboard { width: 100%; max-width: 1400px; display: grid; grid-template-columns: 300px 1fr; gap: 24px; }
-        .card { background: var(--panel); border: 1px solid #1f2937; border-radius: 16px; padding: 24px; }
-        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-        
-        /* Stats Component */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
-        .stat-card { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; }
-        .stat-val { font-size: 1.8rem; font-weight: 700; color: #60a5fa; margin-top: 8px; }
-        
-        /* Table Component */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; color: var(--dim); font-size: 0.75rem; text-transform: uppercase; padding: 16px; border-bottom: 1px solid #1f2937; }
-        td { padding: 16px; border-bottom: 1px solid #1f2937; font-size: 0.9rem; }
-        
-        /* Controls */
-        input, select { background: #0f172a; border: 1px solid #1e293b; padding: 12px; border-radius: 8px; color: white; width: 100%; margin-bottom: 16px; }
-        button { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 8px; cursor: pointer; font-weight: 600; width: 100%; }
-        
-        .status-online { color: #22c55e; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HK-Bot 3D Neural Control Center</title>
+  <!-- Three.js 3D 엔진 라이브러리 (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    :root { --accent: #38bdf8; --bg: #030712; --panel: rgba(15, 23, 42, 0.85); }
+    body { background: var(--bg); color: #fff; font-family: 'Inter', -apple-system, sans-serif; margin: 0; padding: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+    
+    header { padding: 15px 30px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(56, 189, 248, 0.3); display: flex; justify-content: space-between; align-items: center; z-index: 10; backdrop-filter: blur(10px); }
+    .brand { font-size: 20px; font-weight: 800; color: var(--accent); letter-spacing: 2px; }
+    
+    .grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 20px; flex: 1; height: calc(100vh - 70px); box-sizing: border-box; }
+    .panel { background: var(--panel); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px); display: flex; flex-direction: column; gap: 15px; z-index: 10; }
+    
+    .robot-viewport { width: 100%; height: 100%; background: radial-gradient(circle, #0f172a 0%, #030712 100%); border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.3); position: relative; overflow: hidden; }
+    #canvas-container { width: 100%; height: 100%; }
+
+    .btn { padding: 14px; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: left; display: flex; align-items: center; justify-content: space-between; }
+    .btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+    .btn-danger { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+    .btn-danger:hover { background: #ef4444; color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5); }
+
+    .hud-overlay { position: absolute; top: 20px; left: 20px; pointer-events: none; border-left: 3px solid var(--accent); padding-left: 10px; }
+    .hud-overlay h4 { margin: 0; color: var(--accent); letter-spacing: 1px; }
+  </style>
 </head>
 <body>
 
-<div class="dashboard">
-    <!-- Sidebar Controls -->
-    <aside class="card">
-        <h3 data-i18n="config">Fleet Configuration</h3>
-        <p style="color:var(--dim); font-size: 0.8rem; margin-bottom: 20px;">Figure-02 Operational Parameters</p>
-        <label>Active Robots</label>
-        <input type="number" id="inp-robots" value="12" oninput="Dashboard.update()">
-        <label>Hourly Revenue Rate ($)</label>
-        <input type="number" id="inp-rate" value="45" oninput="Dashboard.update()">
-        <button onclick="Dashboard.sync()">Initialize Settlement</button>
-    </aside>
+<header>
+  <div class="brand" id="txt-title">HK-BOT 3D CONTROL</div>
+  <select id="lang" onchange="updateUI(this.value)" style="background:#000; color:#fff; border:1px solid var(--accent); padding:8px 15px; border-radius:20px; cursor:pointer; outline:none;">
+    <option value="ko">🇰🇷 한국어</option>
+    <option value="en">🇺🇸 English</option>
+    <option value="zh">🇨🇳 中文</option>
+    <option value="ar">🇸🇦 العربية</option>
+    <option value="hi">🇮🇳 हिन्दी</option>
+    <option value="es">🇪🇸 Español</option>
+    <option value="pt">🇧🇷 Português</option>
+    <option value="uk">🇺🇦 Українська</option>
+    <option value="ja">🇯🇵 日本語</option>
+    <option value="ru">🇷🇺 Русский</option>
+    <option value="vi">🇻🇳 Tiếng Việt</option>
+    <option value="th">🇹🇭 ภาษาไทย</option>
+    <option value="id">🇮🇩 Indonesia</option>
+    <option value="ps">🇵🇸 فلسطين</option>
+    <option value="de">🇩🇪 Deutsch</option>
+    <option value="it">🇮🇹 Italiano</option>
+    <option value="fr">🇫🇷 Français</option>
+  </select>
+</header>
 
-    <!-- Main Content -->
-    <main>
-        <div class="header-section">
-            <h1 data-i18n="title">HK Global Command Center</h1>
-            <select id="langSelect" onchange="Dashboard.setLang(this.value)" style="width: 200px;"></select>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card"><div class="stat-lbl" data-i18n="revenue">Revenue</div><div class="stat-val" id="disp-revenue">$0</div></div>
-            <div class="stat-card"><div class="stat-lbl" data-i18n="cost">Op-Cost</div><div class="stat-val" id="disp-cost" style="color: #ef4444;">$0</div></div>
-            <div class="stat-card"><div class="stat-lbl" data-i18n="net">Net Profit</div><div class="stat-val" id="disp-net" style="color: #22c55e;">$0</div></div>
-        </div>
-
-        <div class="card">
-            <table>
-                <thead>
-                    <tr>
-                        <th data-i18n="th-id">Robot ID</th>
-                        <th data-i18n="th-status">Status</th>
-                        <th data-i18n="th-earn">Daily Earning</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
-    </main>
+<div class="grid">
+  <div class="panel">
+    <h3 id="lbl-cmd" style="margin: 0 0 10px 0; color: var(--accent);">COMMAND CENTER</h3>
+    <button class="btn" onclick="triggerAction('move')"><span id="btn-move">Move</span> <span>➔</span></button>
+    <button class="btn" onclick="triggerAction('stand')"><span id="btn-stand">Standby</span> <span>⏸</span></button>
+    <button class="btn" onclick="triggerAction('patrol')"><span id="btn-patrol">Patrol Mode</span> <span>🔄</span></button>
+    <button class="btn btn-danger" onclick="triggerAction('power')" style="margin-top: auto;"><span id="btn-power">Power Off</span> <span>⏻</span></button>
+  </div>
+  
+  <div class="robot-viewport">
+    <div class="hud-overlay">
+      <h4 id="hud-status">STATUS: ONLINE</h4>
+      <small style="color:#94a3b8">REAL-TIME 3D TELEMETRY</small>
+    </div>
+    <div id="canvas-container"></div>
+  </div>
 </div>
 
 <script>
-    // 1. Enterprise Dictionary (I18N Layer)
-    const Dictionary = {
-        en: { title: "Global Command Center", config: "Fleet Config", revenue: "Gross Revenue", cost: "Operational Cost", net: "Net Profit", "th-id": "Asset ID", "th-status": "Network Status", "th-earn": "Daily Performance" },
-        ko: { title: "글로벌 로봇 관제센터", config: "기체 설정", revenue: "총 매출", cost: "운용 비용", net: "순수익", "th-id": "기체 번호", "th-status": "네트워크 상태", "th-earn": "일일 수익" },
-        ja: { title: "グローバル・ロボット管制センター", config: "艦隊設定", revenue: "総売上", cost: "運用コスト", net: "純利益", "th-id": "資産ID", "th-status": "ネットワーク状態", "th-earn": "日次パフォーマンス" },
-        // ... (필요시 16개국 데이터 확장)
-    };
+  // --- 16개국 다국어 데이터 ---
+  const i18n = {
+    ko: { title: "HK-Bot 3D 제어 센터", cmd: "명령 제어소", move: "이동 개시", stand: "대기 모드", patrol: "자율 순찰", power: "전원 종료", status: "상태: 정상 가동 중" },
+    en: { title: "HK-Bot 3D Control Center", cmd: "COMMAND CENTER", move: "Initiate Movement", stand: "Standby Mode", patrol: "Autonomous Patrol", power: "System Shutdown", status: "STATUS: ONLINE" },
+    zh: { title: "HK-Bot 3D 控制中心", cmd: "指令控制中心", move: "开始移动", stand: "待机模式", patrol: "自主巡逻", power: "关闭系统", status: "状态: 运行正常" },
+    ar: { title: "HK-Bot مركز التحكم ثلاثي الأبعاد", cmd: "مركز الأوامر", move: "بدء الحركة", stand: "وضع الاستعداد", patrol: "دورية ذاتية", power: "إيقاف التشغيل", status: "الحالة: متصل" },
+    hi: { title: "HK-Bot 3D नियंत्रण केंद्र", cmd: "आदेश केंद्र", move: "गति शुरू करें", stand: "स्टैंडबाय मोड", patrol: "स्वायत्त गश्त", power: "सिस्टम बंद करें", status: "स्थिति: ऑनलाइन" },
+    es: { title: "Centro de Control 3D HK-Bot", cmd: "CENTRO DE MANDO", move: "Iniciar Movimiento", stand: "Modo Reposo", patrol: "Patrulla Autónoma", power: "Apagar Sistema", status: "ESTADO: EN LÍNEA" },
+    pt: { title: "Centro de Controle 3D HK-Bot", cmd: "CENTRO DE COMANDO", move: "Iniciar Movimento", stand: "Modo de Espera", patrol: "Patrulha Autônoma", power: "Desligar Sistema", status: "STATUS: ONLINE" },
+    uk: { title: "Центр керування 3D HK-Bot", cmd: "КОМАНДНИЙ ЦЕНТР", move: "Почати рух", stand: "Режим очікування", patrol: "Автономний патруль", power: "Вимкнути систему", status: "СТАН: В МЕРЕЖІ" },
+    ja: { title: "HK-Bot 3D 制御センター", cmd: "指令コントロール", move: "移動 me 始", stand: "待機モード", patrol: "自律巡回", power: "システム終了", status: "ステータス: 正常稼働" },
+    ru: { title: "3D Центр управления HK-Bot", cmd: "КОМАНДНЫЙ ЦЕНТР", move: "Начать движение", stand: "Режим ожидания", patrol: "Автономный патруль", power: "Выключить систему", status: "СТАТУС: В СЕТИ" },
+    vi: { title: "Trung tâm điều khiển 3D HK-Bot", cmd: "TRUNG TÂM LỆNH", move: "Bắt đầu di chuyển", stand: "Chế độ chờ", patrol: "Tuần tra tự động", power: "Tắt hệ thống", status: "TRẠNG THÁI: HOẠT ĐỘNG" },
+    th: { title: "ศูนย์ควบคุม 3D HK-Bot", cmd: "ศูนย์บัญชาการ", move: "เริ่มการเคลื่อนที่", stand: "โหมดสแตนด์บาย", patrol: "ลาดตระเวนอัตโนมัติ", power: "ปิดระบบ", status: "สถานะ: ออนไลน์" },
+    id: { title: "Pusat Kontrol 3D HK-Bot", cmd: "PUSAT PERINTAH", move: "Mulai Bergerak", stand: "Mode Siaga", patrol: "Patroli Mandiri", power: "Matikan Sistem", status: "STATUS: ONLINE" },
+    ps: { title: "HK-Bot 3D کنټرول مرکز", cmd: "د قوماندې مرکز", move: "حرکت پیل کړئ", stand: "انتظار حالت", patrol: "خپلواک ګشت", power: "سیسټم بندول", status: "حالت: فعال" },
+    de: { title: "HK-Bot 3D Steuerzentrale", cmd: "BEFEHLSZENTRALE", move: "Bewegung Starten", stand: "Standby-Modus", patrol: "Autonome Patrouille", power: "System Ausschalten", status: "STATUS: ONLINE" },
+    it: { title: "Centro di Controllo 3D HK-Bot", cmd: "CENTRO DI COMANDO", move: "Avvia Movimento", stand: "Modalità Standby", patrol: "Pattuglia Autonoma", power: "Spegnimento", status: "STATO: ONLINE" },
+    fr: { title: "Centre de Contrôle 3D HK-Bot", cmd: "CENTRE DE COMMANDEMENT", move: "Lancer le Mouvement", stand: "Mode Veille", patrol: "Patrouille Autonome", power: "Éteindre le Système", status: "STATUT: EN LIGNE" }
+  };
 
-    // 2. Dashboard Engine (MVC Controller)
-    const Dashboard = {
-        lang: 'ko',
-        state: { robots: 12, rate: 45, maint: 10 },
+  function updateUI(lang) {
+    const d = i18n[lang];
+    document.getElementById('txt-title').innerText = d.title;
+    document.getElementById('lbl-cmd').innerText = d.cmd;
+    document.getElementById('btn-move').innerText = d.move;
+    document.getElementById('btn-stand').innerText = d.stand;
+    document.getElementById('btn-patrol').innerText = d.patrol;
+    document.getElementById('btn-power').innerText = d.power;
+    document.getElementById('hud-status').innerText = d.status;
+  }
 
-        setLang(l) { this.lang = l; this.update(); },
+  // --- THREE.JS 3D 실물 로봇 렌더링 엔진 ---
+  const container = document.getElementById('canvas-container');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
 
-        update() {
-            this.state.robots = parseInt(document.getElementById('inp-robots').value);
-            this.state.rate = parseInt(document.getElementById('inp-rate').value);
-            
-            const gross = this.state.robots * 16 * this.state.rate;
-            const cost = this.state.robots * 16 * this.state.maint;
-            
-            // DOM Patching
-            document.getElementById('disp-revenue').innerText = `$${gross.toLocaleString()}`;
-            document.getElementById('disp-cost').innerText = `$${cost.toLocaleString()}`;
-            document.getElementById('disp-net').innerText = `$${(gross - cost).toLocaleString()}`;
-            
-            // I18N Bind
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(Dictionary[this.lang]?.[key]) el.innerText = Dictionary[this.lang][key];
-            });
+  // 조명 설정
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+  scene.add(ambientLight);
+  const dirLight = new THREE.DirectionalLight(0x38bdf8, 1.5);
+  dirLight.position.set(5, 10, 7);
+  scene.add(dirLight);
 
-            this.renderTable();
-        },
+  // 로봇 피규어 그룹 생성
+  const robotGroup = new THREE.Group();
 
-        renderTable() {
-            const body = document.getElementById('table-body');
-            body.innerHTML = Array.from({length: Math.min(this.state.robots, 6)}).map((_, i) => `
-                <tr>
-                    <td>HK-FIG-00${i+1}</td>
-                    <td class="status-online">● Online</td>
-                    <td>$${(16 * this.state.rate).toLocaleString()}</td>
-                </tr>
-            `).join('');
-        },
+  // 재질 정의 (메탈릭 다크 가디언 재질)
+  const armorMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.8, roughness: 0.2 });
+  const jointMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.5, roughness: 0.5 });
+  const glowMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
 
-        sync() { console.log("Initializing Global Settlement API..."); alert("Enterprise API Synced."); }
-    };
+  // 1. 머리 (Head)
+  const headGeo = new THREE.BoxGeometry(0.8, 0.7, 0.8);
+  const head = new THREE.Mesh(headGeo, armorMat);
+  head.position.y = 2.2;
+  robotGroup.add(head);
 
-    // 3. Init Bootstrapping
-    Object.keys(Dictionary).forEach(k => {
-        const opt = document.createElement('option'); opt.value = k; opt.text = k.toUpperCase();
-        document.getElementById('langSelect').appendChild(opt);
-    });
-    Dashboard.update();
+  // 2. 바이저/눈 (Glowing Visor)
+  const visorGeo = new THREE.BoxGeometry(0.6, 0.15, 0.1);
+  const visor = new THREE.Mesh(visorGeo, glowMat);
+  visor.position.set(0, 2.25, 0.41);
+  robotGroup.add(visor);
+
+  // 3. 가슴/몸통 (Torso)
+  const torsoGeo = new THREE.BoxGeometry(1.4, 1.6, 0.9);
+  const torso = new THREE.Mesh(torsoGeo, armorMat);
+  torso.position.y = 0.9;
+  robotGroup.add(torso);
+
+  // 4. 가슴 코어 (Chest Core)
+  const coreGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.1, 16);
+  const core = new THREE.Mesh(coreGeo, glowMat);
+  core.rotation.x = Math.PI / 2;
+  core.position.set(0, 1.1, 0.46);
+  robotGroup.add(core);
+
+  // 5. 팔 (Arms)
+  const armGeo = new THREE.CylinderGeometry(0.2, 0.15, 1.4, 16);
+  const leftArm = new THREE.Mesh(armGeo, armorMat);
+  leftArm.position.set(-1.0, 0.8, 0);
+  robotGroup.add(leftArm);
+
+  const rightArm = new THREE.Mesh(armGeo, armorMat);
+  rightArm.position.set(1.0, 0.8, 0);
+  robotGroup.add(rightArm);
+
+  // 6. 다리 (Legs)
+  const legGeo = new THREE.CylinderGeometry(0.22, 0.18, 1.6, 16);
+  const leftLeg = new THREE.Mesh(legGeo, armorMat);
+  leftLeg.position.set(-0.4, -0.7, 0);
+  robotGroup.add(leftLeg);
+
+  const rightLeg = new THREE.Mesh(legGeo, armorMat);
+  rightLeg.position.set(0.4, -0.7, 0);
+  robotGroup.add(rightLeg);
+
+  scene.add(robotGroup);
+  camera.position.set(0, 1, 6);
+
+  // 회전 및 애니메이션 변수
+  let isPatrolling = false;
+  let rotationSpeed = 0.008;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    
+    // 로봇 기본 유연 회전
+    robotGroup.rotation.y += rotationSpeed;
+
+    // 순찰 모드 시 무작위 펄스 모션
+    if(isPatrolling) {
+      robotGroup.position.y = Math.sin(Date.now() * 0.003) * 0.15;
+    } else {
+      robotGroup.position.y = 0;
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  // 버튼 인터랙션 제어
+  function triggerAction(action) {
+    if(action === 'move') {
+      rotationSpeed = 0.05;
+      glowMat.color.setHex(0x38bdf8);
+    } else if(action === 'stand') {
+      rotationSpeed = 0.005;
+      isPatrolling = false;
+      glowMat.color.setHex(0x38bdf8);
+    } else if(action === 'patrol') {
+      rotationSpeed = 0.02;
+      isPatrolling = true;
+      glowMat.color.setHex(0x10b981); // 순찰 중 그린
+    } else if(action === 'power') {
+      rotationSpeed = 0;
+      isPatrolling = false;
+      glowMat.color.setHex(0xef4444); // 전원 OFF 레드
+    }
+  }
+
+  // 창 크기 변경 대응
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 </script>
 </body>
 </html>
