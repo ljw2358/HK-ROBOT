@@ -2,131 +2,214 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HK-ROBOT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HK Robot Fleet - Daily Revenue Settlement System</title>
     <style>
-        /* 프리미엄 다크 모드 스타일 */
-        body { font-family: 'Noto Sans KR', sans-serif; margin: 0; padding: 0; background-color: #000; color: #fff; line-height: 1.8; overflow-x: hidden; }
-        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --green: #22c55e;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; }
+
+        /* Header & Language Dropdown */
+        header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .logo { font-size: 1.4rem; font-weight: bold; color: var(--accent-color); display: flex; align-items: center; gap: 8px; }
         
-        /* 상단 네비게이션 */
-        header { background: rgba(0,0,0,0.95); padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #222; }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 24px; font-weight: 900; color: #007bff; text-decoration: none; }
-        
-        /* 언어 선택 (모바일 최적화) */
-        .lang-selector { position: relative; }
-        .lang-btn { background: #111; color: #fff; border: 1.5px solid #007bff; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-size: 13px; font-weight: bold; }
-        .lang-dropdown { display: none; position: absolute; right: 0; background: #111; min-width: 140px; border: 1px solid #333; border-radius: 5px; margin-top: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .lang-dropdown a { color: #ccc; padding: 12px; text-decoration: none; display: block; font-size: 14px; border-bottom: 1px solid #222; }
-        .lang-dropdown a:hover { background: #007bff; color: #fff; }
-        .lang-selector:hover .lang-dropdown { display: block; }
+        .lang-select-wrapper { position: relative; }
+        select.lang-select {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+        }
 
-        /* 히어로 섹션 (웅장한 느낌) */
-        .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 80px; background: radial-gradient(circle at center, #111 0%, #000 100%); }
-        .hero-content h1 { font-size: 3.5rem; margin-bottom: 20px; font-weight: 900; background: linear-gradient(45deg, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-content p { font-size: 1.3rem; color: #999; max-width: 800px; margin: 0 auto; }
+        /* Dashboard Grid */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 25px; }
+        .card { background-color: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border); }
+        .card-title { color: var(--text-sub); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; }
+        .card-value { font-size: 1.8rem; font-weight: bold; }
+        .card-value.green { color: var(--green); }
 
-        /* 핵심 비전 섹션 (내용 보강) */
-        .vision-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 80px 0; }
-        .vision-card { background: #0a0a0a; padding: 45px; border-radius: 20px; border: 1px solid #222; transition: 0.4s; }
-        .vision-card:hover { border-color: #007bff; transform: translateY(-10px); }
-        .vision-card h3 { color: #007bff; font-size: 1.8rem; margin-top: 0; margin-bottom: 20px; }
-        .vision-card p { font-size: 1.1rem; color: #888; margin: 0; }
+        /* Calculator Controls */
+        .controls-card { margin-bottom: 25px; }
+        .control-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        label { font-size: 0.9rem; color: var(--text-sub); display: flex; justify-content: space-between; }
+        input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
+        input[type="number"] { background: var(--bg-color); border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 6px; width: 100%; }
 
-        /* 하단 컨택트 */
-        footer { padding: 100px 0 50px; text-align: center; background: #000; border-top: 1px solid #111; }
-        .contact-box { margin-bottom: 30px; }
-        .contact-email { color: #007bff; font-size: 2rem; font-weight: 900; text-decoration: none; }
-        .copyright { color: #333; margin-top: 40px; font-size: 14px; }
+        /* Table */
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        th { background-color: #0f172a; color: var(--text-sub); padding: 12px; border-bottom: 1px solid var(--border); }
+        td { padding: 12px; border-bottom: 1px solid var(--border); }
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: var(--green); }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="container header-flex">
-        <a href="#" class="logo">HK-ROBOT</a>
-        <div class="lang-selector">
-            <button class="lang-btn" id="lang-btn-text">🌐 Language (언어)</button>
-            <div class="lang-dropdown">
-                <a href="javascript:void(0)" onclick="setLang('ko', '한국어')">한국어</a>
-                <a href="javascript:void(0)" onclick="setLang('en', 'English')">English</a>
-                <a href="javascript:void(0)" onclick="setLang('zh', '中文')">中文</a>
-                <a href="javascript:void(0)" onclick="setLang('ar', 'العربية')">العربية</a>
-                <a href="javascript:void(0)" onclick="setLang('hi', 'हिन्दी')">हिन्दी</a>
-                <a href="javascript:void(0)" onclick="setLang('es', 'Español')">Español</a>
-                <a href="javascript:void(0)" onclick="setLang('pt', 'Português')">Português</a>
-                <a href="javascript:void(0)" onclick="setLang('uk', 'Українська')">Українська</a>
-                <a href="javascript:void(0)" onclick="setLang('ja', '日本語')">日本語</a>
-                <a href="javascript:void(0)" onclick="setLang('ru', 'Русский')">Русский</a>
+    <!-- Header with Top-Right Language Dropdown -->
+    <header>
+        <div class="logo">🤖 HK Robot Daily Settlement</div>
+        <div class="lang-select-wrapper">
+            <select class="lang-select" id="langSelect" onchange="changeLanguage()">
+                <option value="en">English (영어)</option>
+                <option value="zh">中文 (중국어)</option>
+                <option value="ar">العربية (아랍어)</option>
+                <option value="hi">हिन्दी (인도어/힌디어)</option>
+                <option value="es">Español (스페인어)</option>
+                <option value="pt-BR">Português (브라질어)</option>
+                <option value="uk">Українська (우크라이나어)</option>
+                <option value="ja">日本語 (일본어)</option>
+                <option value="ru">Русский (러시아어)</option>
+                <option value="vi">Tiếng Việt (베트남어)</option>
+                <option value="th">ไทย (태국어)</option>
+                <option value="id">Bahasa Indonesia (인도네시아어)</option>
+                <option value="pa">فلسطين (팔레스타인 아랍어)</option>
+                <option value="de">Deutsch (독일어)</option>
+                <option value="it">Italiano (이태리어)</option>
+                <option value="fr">Français (프랑스어)</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Daily Revenue Settlement Cards -->
+    <div class="grid-3">
+        <div class="card">
+            <div class="card-title" id="lbl-daily-revenue">일일 총 매출</div>
+            <div class="card-value" id="val-revenue">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="card-title" id="lbl-daily-cost">일일 운용/전력 비용</div>
+            <div class="card-value" style="color: #ef4444;" id="val-cost">$0.00</div>
+        </div>
+        <div class="card">
+            <div class="card-title" id="lbl-daily-profit">일일 최종 정산 순수익</div>
+            <div class="card-value green" id="val-profit">$0.00</div>
+        </div>
+    </div>
+
+    <!-- Parameter Controls -->
+    <div class="card controls-card">
+        <h3 style="margin-bottom: 15px;" id="lbl-params">정산 파라미터 설정</h3>
+        
+        <div class="control-group">
+            <label><span id="lbl-robot-count">가동 로봇 수</span>: <b id="disp-robot-count">10</b>대</label>
+            <input type="range" id="input-robots" min="1" max="100" value="10" oninput="calculate()">
+        </div>
+
+        <div class="control-group">
+            <label><span id="lbl-hours">일일 가동 시간 (기체당)</span>: <b id="disp-hours">16</b>시간</label>
+            <input type="range" id="input-hours" min="1" max="24" value="16" oninput="calculate()">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="control-group">
+                <label id="lbl-rate">시간당 임대/작업 단가 ($)</label>
+                <input type="number" id="input-rate" value="45" oninput="calculate()">
+            </div>
+            <div class="control-group">
+                <label id="lbl-maintenance">시간당 유지/전력비 ($)</label>
+                <input type="number" id="input-maint" value="10" oninput="calculate()">
             </div>
         </div>
     </div>
-</header>
 
-<section class="hero">
-    <div class="container hero-content">
-        <h1 id="txt-h1">HK-ROBOT:<br>로봇공학의 혁명</h1>
-        <p id="txt-p1">우리는 80조 원을 들여 하드웨어를 사지 않습니다. 차세대 로봇의 뇌(OS)인 OpenMind를 장악하여, 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다.</p>
+    <!-- Robot Fleet Status Table -->
+    <div class="card">
+        <h3 style="margin-bottom: 15px;" id="lbl-fleet">개별 로봇 일일 정산 리스트</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Robot ID</th>
+                    <th id="th-model">모델</th>
+                    <th id="th-hours">일일 가동시간</th>
+                    <th id="th-gross">일일 매출</th>
+                    <th id="th-net">정산 예정액</th>
+                    <th id="th-status">상태</th>
+                </tr>
+            </thead>
+            <tbody id="robot-table-body">
+                <!-- Dynamic Rows -->
+            </tbody>
+        </table>
     </div>
-</section>
 
-<section class="container">
-    <div class="vision-grid">
-        <div class="vision-card">
-            <h3 id="txt-v1-t">1. 지능 독점</h3>
-            <p id="txt-v1-d">전 세계 모든 휴머노이드가 우리 OS를 써야만 움직이게 만드는 '로봇판 안드로이드' 생태계를 완성합니다.</p>
-        </div>
-        <div class="vision-card">
-            <h3 id="txt-v2-t">2. 제조 혁명</h3>
-            <p id="txt-v2-d">포스코 공정을 세계 최초의 휴머노이드 전용 스마트 제철소로 전환하여 압도적 생산 데이터를 확보합니다.</p>
-        </div>
-        <div class="vision-card">
-            <h3 id="txt-v3-t">3. 글로벌 거점</h3>
-            <p id="txt-v3-d">해오름 지치시를 본부로 삼아, 전 세계 로봇의 AS 및 지능 업데이트를 실시간으로 통제합니다.</p>
-        </div>
-    </div>
-</section>
+    <script>
+        // Language Labels Dictionary
+        const i18n = {
+            en: { revenue: "Daily Gross Revenue", cost: "Daily Operating Cost", profit: "Daily Net Settlement", params: "Settlement Parameters", count: "Active Robots", hours: "Daily Hours / Unit", rate: "Hourly Rate ($)", maint: "Hourly Cost ($)", fleet: "Robot Fleet Daily Status", model: "Model", status: "Settled" },
+            zh: { revenue: "每日总收入", cost: "每日运营成本", profit: "每日净结算", params: "结算参数设置", count: "运行机器人数量", hours: "每日运行时间/台", rate: "每小时单价 ($)", maint: "每小时成本 ($)", fleet: "机器人每日结算列表", model: "型号", status: "已结算" },
+            ar: { revenue: "الإيرادات اليومية الإجمالية", cost: "تكلفة التشغيل اليومية", profit: "صافي التسوية اليومية", params: "معلمات التسوية", count: "الروبوتات النشطة", hours: "ساعات العمل اليومية", rate: "السعر بالساعة ($)", maint: "التكلفة بالساعة ($)", fleet: "حالة أسطول الروبوتات", model: "النموذج", status: "مكتمل" },
+            ja: { revenue: "一日総売上", cost: "一日運用/電力コスト", profit: "一日最終決済純利益", params: "決済パラメータ設定", count: "稼働ロボット数", hours: "1日稼働時間/台", rate: "時間単価 ($)", maint: "時間 costs ($)", fleet: "個別ロボット日次決済リスト", model: "モデル", status: "決済完了" },
+            ko: { revenue: "일일 총 매출", cost: "일일 운용/전력 비용", profit: "일일 최종 정산 순수익", params: "정산 파라미터 설정", count: "가동 로봇 수", hours: "일일 가동 시간 (기체당)", rate: "시간당 임대/작업 단가 ($)", maint: "시간당 유지/전력비 ($)", fleet: "개별 로봇 일일 정산 리스트", model: "모델", status: "정산 완료" }
+        };
 
-<footer>
-    <div class="container">
-        <div class="contact-box">
-            <p style="color:#555; margin-bottom: 10px;">Contact Us</p>
-            <a href="mailto:info@hkwb.co.kr" class="contact-email">info@hkwb.co.kr</a>
-        </div>
-        <p class="copyright">&copy; 2026 HK Group. All rights reserved.</p>
-    </div>
-</footer>
+        function calculate() {
+            const robots = parseInt(document.getElementById('input-robots').value);
+            const hours = parseInt(document.getElementById('input-hours').value);
+            const rate = parseFloat(document.getElementById('input-rate').value) || 0;
+            const maint = parseFloat(document.getElementById('input-maint').value) || 0;
 
-<script>
-    // 10개 언어 데이터 완벽 세팅
-    const translations = {
-        'ko': { h1: "HK-ROBOT:<br>로봇공학의 혁명", p1: "차세대 로봇의 뇌(OS)인 OpenMind를 장악하여 전 세계 로봇에 파이(Pi)의 영혼을 심겠습니다.", v1t: "1. 지능 독점", v1d: "로봇판 안드로이드 생태계 완성.", v2t: "2. 제조 혁명", v2d: "스마트 제철소로 데이터 확보.", v3t: "3. 글로벌 거점", v3d: "해오름 본부에서 전 세계 통제." },
-        'en': { h1: "HK-ROBOT:<br>Robotics Revolution", p1: "We seize OpenMind, the brain (OS) of next-gen robots, to implant Pi's soul worldwide.", v1t: "1. Intelligence Monopoly", v1d: "Completing the Robot Android Ecosystem.", v2t: "2. Manufacturing Revolution", v2d: "Securing data with Smart Factories.", v3t: "3. Global Hub", v3d: "Global control from Haeoreum HQ." },
-        'zh': { h1: "HK-ROBOT:<br>机器人革命", p1: "掌握 OpenMind，将 Pi 的灵魂植入全球机器人。", v1t: "1. 智能垄断", v1d: "完成机器人版安卓生态系统。", v2t: "2. 制造革命", v2d: "通过智能工厂获取数据。", v3t: "3. 全球据点", v3d: "通过海오름总部控制全球。" },
-        'ar': { h1: "HK-ROBOT:<br>ثورة الروبوتات", p1: "نزرع روح Pi في الروبوتات من خلال السيطرة على OpenMind.", v1t: "1. احتكار الذكاء", v1d: "إكمال نظام أندرويد للروبوتات.", v2t: "2. ثورة التصنيع", v2d: "تأمين البيانات بالمصانع الذكية.", v3t: "3. المركز العالمي", v3d: "التحكم العالمي من المقر." },
-        'hi': { h1: "HK-ROBOT:<br>रोबोटिक्स क्रांति", p1: "OpenMind को नियंत्रित करके दुनिया भर के रोबोटों में Pi की आत्मा का रोपण।", v1t: "1. खुफिया एकाधिकार", v1d: "रोबोट एंड्रॉइड इकोसिस्टम।", v2t: "2. निर्माण क्रांति", v2d: "स्मार्ट कारखानों से डेटा सुरक्षित करना।", v3t: "3. ग्लोबल हब", v3d: "मुख्यालय से वैश्विक नियंत्रण।" },
-        'es': { h1: "HK-ROBOT:<br>Revolución Robótica", p1: "Implantamos el alma de Pi en robots dominando OpenMind.", v1t: "1. Monopolio de Inteligencia", v1d: "Ecosistema Android para robots.", v2t: "2. Revolución Industrial", v2d: "Datos con fábricas inteligentes.", v3t: "3. Hub Global", v3d: "Control global desde la sede." },
-        'pt': { h1: "HK-ROBOT:<br>Revolução Robótica", p1: "Implantamos a alma de Pi em robôs dominando o OpenMind.", v1t: "1. Monopólio de Inteligência", v1d: "Ecossistema Android para robôs.", v2t: "2. Revolução Industrial", v2d: "Dados com fábricas inteligentes.", v3t: "3. Hub Global", v3d: "Controle global pela sede." },
-        'uk': { h1: "HK-ROBOT:<br>Революція робототехніки", hD: "Вживляємо душу Pi в роботів через OpenMind.", v1t: "1. Монополія інтелекту", v1d: "Екосистема Android для роботів.", v2t: "2. Виробнича революція", v2d: "Дані з розумних заводів.", v3t: "3. Глобальний центр", v3d: "Глобальний контроль зі штабу." },
-        'ja': { h1: "HK-ROBOT:<br>ロボティクス革命", p1: "OpenMindを掌握し、全世界のロボットにPiの魂を植え付けます。", v1t: "1. 知能独占", v1d: "ロボット版Android。 ", v2t: "2. 製造革命", v2d: "スマート製鉄所。 ", v3t: "3. グローバル拠点", v3d: "海おるむ本部。 " },
-        'ru': { h1: "HK-ROBOT:<br>Революция робототехники", p1: "Вживляем душу Pi в роботов через OpenMind.", v1t: "1. Монополия интеллекта", v1d: "Android для роботов.", v2t: "2. Производство", v2d: "Данные с умных заводов.", v3t: "3. Глобальный хаб", v3d: "Глобальный контроль." }
-    };
+            document.getElementById('disp-robot-count').innerText = robots;
+            document.getElementById('disp-hours').innerText = hours;
 
-    function setLang(lang, name) {
-        const l = translations[lang];
-        if(l) {
-            document.getElementById('txt-h1').innerHTML = l.h1;
-            document.getElementById('txt-p1').innerText = l.p1;
-            document.getElementById('txt-v1-t').innerText = l.v1t;
-            document.getElementById('txt-v1-d').innerText = l.v1d;
-            document.getElementById('txt-v2-t').innerText = l.v2t;
-            document.getElementById('txt-v2-d').innerText = l.v2d;
-            document.getElementById('txt-v3-t').innerText = l.v3t;
-            document.getElementById('txt-v3-d').innerText = l.v3d;
-            document.getElementById('lang-btn-text').innerText = "🌐 " + name;
+            const totalGross = robots * hours * rate;
+            const totalCost = robots * hours * maint;
+            const netProfit = totalGross - totalCost;
+
+            document.getElementById('val-revenue').innerText = '$' + totalGross.toLocaleString();
+            document.getElementById('val-cost').innerText = '$' + totalCost.toLocaleString();
+            document.getElementById('val-profit').innerText = '$' + netProfit.toLocaleString();
+
+            renderTable(robots, hours, rate, maint);
         }
-    }
-</script>
+
+        function renderTable(robots, hours, rate, maint) {
+            const tbody = document.getElementById('robot-table-body');
+            tbody.innerHTML = '';
+
+            for (let i = 1; i <= Math.min(robots, 10); i++) {
+                const gross = hours * rate;
+                const net = hours * (rate - maint);
+                const row = `<tr>
+                    <td><b>HK-FIG-${String(i).padStart(3, '0')}</b></td>
+                    <td>Figure 02 Custom</td>
+                    <td>${hours} hrs</td>
+                    <td>$${gross.toLocaleString()}</td>
+                    <td style="color:var(--green); font-weight:bold;">$${net.toLocaleString()}</td>
+                    <td><span class="status-badge">Settled</span></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            }
+        }
+
+        function changeLanguage() {
+            const lang = document.getElementById('langSelect').value;
+            const dict = i18n[lang] || i18n['en'];
+
+            if(dict.revenue) document.getElementById('lbl-daily-revenue').innerText = dict.revenue;
+            if(dict.cost) document.getElementById('lbl-daily-cost').innerText = dict.cost;
+            if(dict.profit) document.getElementById('lbl-daily-profit').innerText = dict.profit;
+            if(dict.params) document.getElementById('lbl-params').innerText = dict.params;
+            if(dict.count) document.getElementById('lbl-robot-count').innerText = dict.count;
+            if(dict.hours) document.getElementById('lbl-hours').innerText = dict.hours;
+            if(dict.rate) document.getElementById('lbl-rate').innerText = dict.rate;
+            if(dict.maint) document.getElementById('lbl-maintenance').innerText = dict.maint;
+            if(dict.fleet) document.getElementById('lbl-fleet').innerText = dict.fleet;
+        }
+
+        // Init
+        calculate();
+    </script>
 </body>
 </html>
