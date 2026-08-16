@@ -1,174 +1,84 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HK UAM 관제 시스템</title>
+  <title>HK ROBOT 시스템 대시보드</title>
   <style>
-    /* 눈이 편안한 다크 모드 컬러 팔레트 */
+    /* 눈이 편안한 다크 모드 스타일 */
     :root {
-      --bg-color: #0d1117; /* 아주 어두운 차콜 */
-      --card-bg: #161b22; /* 카드 배경 */
-      --text-main: #e6edf3; /* 흰색에 가까운 부드러운 텍스트 */
-      --text-dim: #8b949e; /* 눈이 편안한 회색 */
-      --accent: #58a6ff; /* 쨍한 초록 대신 차분한 블루 포인트 */
-      --border: #30363d; /* 테두리 강조 최소화 */
-      --danger: #f85149; /* 톤다운된 레드 */
+      --bg-color: #0d1117;
+      --card-bg: #161b22;
+      --text-main: #e6edf3;
+      --text-dim: #8b949e;
+      --accent: #58a6ff;
+      --border: #30363d;
+      --danger: #f85149;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Pretendard', -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      padding: 20px;
-    }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 20px; }
 
-    /* 헤더 */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
+    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 
-    .brand-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--accent);
-    }
+    .brand-title { font-size: 1.2rem; font-weight: 600; color: var(--accent); }
 
+    /* 드롭다운 스타일 */
     select {
       background: var(--card-bg);
       color: var(--text-main);
       border: 1px solid var(--border);
       padding: 8px 12px;
       border-radius: 6px;
-      outline: none;
       cursor: pointer;
     }
 
-    /* 레이아웃 */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-    }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
 
-    .card-title {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+    .card-title { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 20px; text-transform: uppercase; }
 
-    /* 레이더 */
-    .radar-display {
-      width: 100%;
-      max-width: 240px;
-      height: 240px;
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      position: relative;
-      background: rgba(88, 166, 255, 0.03);
-    }
+    .radar-display { width: 100%; max-width: 240px; height: 240px; border: 1px solid var(--border); border-radius: 50%; margin: 0 auto 20px; position: relative; background: rgba(88, 166, 255, 0.03); }
 
-    .target-dot {
-      width: 8px;
-      height: 8px;
-      background-color: var(--danger);
-      border-radius: 50%;
-      position: absolute;
-      top: 45%;
-      left: 60%;
-    }
+    .target-dot { width: 8px; height: 8px; background-color: var(--danger); border-radius: 50%; position: absolute; top: 45%; left: 60%; }
 
-    .tracking-status {
-      text-align: center;
-      color: var(--text-dim);
-      font-size: 0.9rem;
-    }
+    .tracking-status { text-align: center; color: var(--text-dim); }
 
-    /* 수치 카드 */
-    .metrics-container {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-    }
+    .metrics-container { display: grid; gap: 15px; }
 
-    .metric-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 20px;
-      border-radius: 12px;
-    }
+    .metric-card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; }
 
-    .metric-label {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      margin-bottom: 8px;
-    }
+    .metric-label { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 8px; }
 
-    .metric-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-    }
+    .metric-value { font-size: 1.8rem; font-weight: 700; }
 
-    .metric-unit {
-      font-size: 0.9rem;
-      color: var(--text-dim);
-      margin-left: 4px;
-    }
+    .metric-unit { font-size: 0.9rem; color: var(--text-dim); }
 
-    /* 반응형 */
-    @media (min-width: 768px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
+    @media (min-width: 768px) { .dashboard-grid { grid-template-columns: 1fr 1fr; } }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand-title" data-i18n="headerTitle">HK UAM 시스템 대시보드</div>
+    <div class="brand-title" data-i18n="headerTitle">HK ROBOT 시스템 대시보드</div>
+    <!-- 17개 언어 리스트 -->
     <select onchange="changeLanguage(this.value)">
-      <option value="ko" selected>한국어</option>
+      <option value="ko">한국어</option>
       <option value="en">English</option>
       <option value="zh">中文</option>
       <option value="ar">العربية</option>
       <option value="hi">हिन्दी</option>
       <option value="es">Español</option>
-      <option value="pt">Português</option>
+      <option value="pt">Português (Brasil)</option>
       <option value="uk">Українська</option>
       <option value="ja">日本語</option>
       <option value="ru">Русский</option>
       <option value="vi">Tiếng Việt</option>
-      <option value="th">ไทย</option>
+      <option value="th">ภาษาไทย</option>
       <option value="id">Bahasa Indonesia</option>
-      <option value="pa">العربية - فلسطين</option>
+      <option value="pa">العربية (فلسطين)</option>
       <option value="de">Deutsch</option>
       <option value="it">Italiano</option>
       <option value="fr">Français</option>
@@ -177,48 +87,47 @@
 
   <main class="dashboard-grid">
     <section class="card">
-      <div class="card-title" data-i18n="radarTitle">공중 레이더 스코프</div>
-      <div class="radar-display">
-        <div class="target-dot"></div>
-      </div>
-      <div class="tracking-status" data-i18n="targetLabel">표적 추적 중: HK-AERO-01</div>
+      <div class="card-title" data-i18n="radarTitle">로봇 레이더 스코프</div>
+      <div class="radar-display"><div class="target-dot"></div></div>
+      <div class="tracking-status" data-i18n="targetLabel">추적 중: HK-ROBOT-01</div>
     </section>
 
     <section class="metrics-container">
       <div class="metric-card">
-        <div class="metric-label" data-i18n="altitude">비행 고도</div>
-        <div class="metric-value">450 <span class="metric-unit">m</span></div>
+        <div class="metric-label" data-i18n="status">시스템 상태</div>
+        <div class="metric-value">ACTIVE</div>
       </div>
       <div class="metric-card">
-        <div class="metric-label" data-i18n="speed">대지 속도</div>
-        <div class="metric-value">180 <span class="metric-unit">km/h</span></div>
+        <div class="metric-label" data-i18n="speed">운행 속도</div>
+        <div class="metric-value">1.2 <span class="metric-unit">m/s</span></div>
       </div>
       <div class="metric-card">
-        <div class="metric-label" data-i18n="power">배터리 잔량</div>
+        <div class="metric-label" data-i18n="power">배터리</div>
         <div class="metric-value">92 <span class="metric-unit">%</span></div>
       </div>
     </section>
   </main>
 
   <script>
+    // 모든 언어 데이터
     const translations = {
-      ko: { headerTitle: "HK UAM 관제 시스템", radarTitle: "공중 레이더", targetLabel: "표적 추적 중: HK-AERO-01", altitude: "비행 고도", speed: "대지 속도", power: "배터리 잔량" },
-      en: { headerTitle: "HK UAM DASHBOARD", radarTitle: "AIRSPACE RADAR", targetLabel: "TRACKING: HK-AERO-01", altitude: "ALTITUDE", speed: "SPEED", power: "POWER" },
-      zh: { headerTitle: "HK UAM 控制系统", radarTitle: "空域雷达", targetLabel: "追踪中: HK-AERO-01", altitude: "飞行高度", speed: "地速", power: "电量" },
-      ar: { headerTitle: "نظام تحكم HK UAM", radarTitle: "رادار المجال الجوي", targetLabel: "جاري التتبع: HK-AERO-01", altitude: "الارتفاع", speed: "السرعة", power: "الطاقة" },
-      hi: { headerTitle: "HK UAM नियंत्रण प्रणाली", radarTitle: "एयरस्पेस राडार", targetLabel: "ट्रैकिंग: HK-AERO-01", altitude: "ऊंचाई", speed: "गति", power: "पावर" },
-      es: { headerTitle: "SISTEMA DE CONTROL HK UAM", radarTitle: "RADAR ESPACIO AÉREO", targetLabel: "RASTREANDO: HK-AERO-01", altitude: "ALTITUD", speed: "VELOCIDAD", power: "BATERÍA" },
-      pt: { headerTitle: "SISTEMA DE CONTROLE HK UAM", radarTitle: "RADAR DE ESPAÇO AÉREO", targetLabel: "RASTREAMENTO: HK-AERO-01", altitude: "ALTITUDE", speed: "VELOCIDADE", power: "BATERIA" },
-      uk: { headerTitle: "СИСТЕМА КЕРУВАННЯ HK UAM", radarTitle: "РАДАР ПОВІТРЯНОГО ПРОСТОРУ", targetLabel: "ВІДСТЕЖЕННЯ: HK-AERO-01", altitude: "ВИСОТА", speed: "ШВИДКІСТЬ", power: "ЗАРЯД" },
-      ja: { headerTitle: "HK UAM 管制システム", radarTitle: "空域レーダー", targetLabel: "追跡中: HK-AERO-01", altitude: "高度", speed: "速度", power: "バッテリー" },
-      ru: { headerTitle: "СИСТЕМА УПРАВЛЕНИЯ HK UAM", radarTitle: "РАДАР ВОЗДУШНОГО ПРОСТРАНСТВА", targetLabel: "ОТСЛЕЖИВАНИЕ: HK-AERO-01", altitude: "ВЫСОТА", speed: "СКОРОСТЬ", power: "ЗАРЯД" },
-      vi: { headerTitle: "HỆ THỐNG ĐIỀU KHIỂN HK UAM", radarTitle: "RADA KHÔNG PHẬN", targetLabel: "THEO DÕI: HK-AERO-01", altitude: "ĐỘ CAO", speed: "TỐC ĐỘ", power: "PIN" },
-      th: { headerTitle: "ระบบควบคุม HK UAM", radarTitle: "เรดาร์น่านฟ้า", targetLabel: "กำลังติดตาม: HK-AERO-01", altitude: "ความสูง", speed: "ความเร็ว", power: "แบตเตอรี่" },
-      id: { headerTitle: "SISTEM KONTROL HK UAM", radarTitle: "RADAR RUANG UDARA", targetLabel: "PELACAKAN: HK-AERO-01", altitude: "KETINGGIAN", speed: "KECEPATAN", power: "DAYA" },
-      pa: { headerTitle: "نظام تحكم HK UAM - فلسطين", radarTitle: "رادار المجال الجوي", targetLabel: "جاري التتبع: HK-AERO-01", altitude: "الارتفاع", speed: "السرعة", power: "الطاقة" },
-      de: { headerTitle: "HK UAM KONTROLLSYSTEM", radarTitle: "LUFTRAUM-RADAR", targetLabel: "VERFOLGUNG: HK-AERO-01", altitude: "HÖHE", speed: "GESCHWINDIGKEIT", power: "BATTERIE" },
-      it: { headerTitle: "SISTEMA DI CONTROLLO HK UAM", radarTitle: "RADAR SPAZIO AEREO", targetLabel: "TRACCIAMENTO: HK-AERO-01", altitude: "ALTITUDINE", speed: "VELOCITÀ", power: "BATTERIA" },
-      fr: { headerTitle: "SYSTÈME DE CONTRÔLE HK UAM", radarTitle: "RADAR ESPACE AÉRIEN", targetLabel: "SUIVI: HK-AERO-01", altitude: "ALTITUDE", speed: "VITESSE", power: "BATTERIE" }
+      ko: { headerTitle: "HK ROBOT 시스템 대시보드", radarTitle: "로봇 레이더 스코프", targetLabel: "추적 중: HK-ROBOT-01", status: "시스템 상태", speed: "운행 속도", power: "배터리" },
+      en: { headerTitle: "HK ROBOT DASHBOARD", radarTitle: "ROBOT RADAR", targetLabel: "TRACKING: HK-ROBOT-01", status: "SYSTEM STATUS", speed: "SPEED", power: "BATTERY" },
+      zh: { headerTitle: "HK ROBOT 控制系统", radarTitle: "机器人雷达", targetLabel: "追踪中: HK-ROBOT-01", status: "系统状态", speed: "速度", power: "电池" },
+      ar: { headerTitle: "نظام تحكم HK ROBOT", radarTitle: "رادار الروبوت", targetLabel: "جاري التتبع: HK-ROBOT-01", status: "حالة النظام", speed: "السرعة", power: "البطارية" },
+      hi: { headerTitle: "HK ROBOT नियंत्रण प्रणाली", radarTitle: "रोबोट रडार", targetLabel: "ट्रैकिंग: HK-ROBOT-01", status: "सिस्टम स्थिति", speed: "गति", power: "बैटरी" },
+      es: { headerTitle: "SISTEMA DE CONTROL HK ROBOT", radarTitle: "RADAR ROBOT", targetLabel: "RASTREANDO: HK-ROBOT-01", status: "ESTADO DEL SISTEMA", speed: "VELOCIDAD", power: "BATERÍA" },
+      pt: { headerTitle: "SISTEMA DE CONTROLE HK ROBOT", radarTitle: "RADAR DO ROBÔ", targetLabel: "RASTREAMENTO: HK-ROBOT-01", status: "ESTADO DO SISTEMA", speed: "VELOCIDADE", power: "BATERIA" },
+      uk: { headerTitle: "СИСТЕМА КЕРУВАННЯ HK ROBOT", radarTitle: "РАДАР РОБОТА", targetLabel: "ВІДСТЕЖЕННЯ: HK-ROBOT-01", status: "СТАН СИСТЕМИ", speed: "ШВИДКІСТЬ", power: "ЗАРЯД" },
+      ja: { headerTitle: "HK ROBOT 管制システム", radarTitle: "ロボットレーダー", targetLabel: "追跡中: HK-ROBOT-01", status: "システム状態", speed: "速度", power: "バッテリー" },
+      ru: { headerTitle: "СИСТЕМА УПРАВЛЕНИЯ HK ROBOT", radarTitle: "РАДАР РОБОТА", targetLabel: "ОТСЛЕЖИВАНИЕ: HK-ROBOT-01", status: "СОСТОЯНИЕ СИСТЕМЫ", speed: "СКОРОСТЬ", power: "БАТАРЕЯ" },
+      vi: { headerTitle: "HỆ THỐNG ĐIỀU KHIỂN HK ROBOT", radarTitle: "RADA ROBOT", targetLabel: "THEO DÕI: HK-ROBOT-01", status: "TRẠNG THÁI", speed: "TỐC ĐỘ", power: "PIN" },
+      th: { headerTitle: "ระบบควบคุม HK ROBOT", radarTitle: "เรดาร์หุ่นยนต์", targetLabel: "กำลังติดตาม: HK-ROBOT-01", status: "สถานะระบบ", speed: "ความเร็ว", power: "แบตเตอรี่" },
+      id: { headerTitle: "SISTEM KONTROL HK ROBOT", radarTitle: "RADAR ROBOT", targetLabel: "PELACAKAN: HK-ROBOT-01", status: "STATUS SISTEM", speed: "KECEPATAN", power: "BATERAI" },
+      pa: { headerTitle: "نظام تحكم HK ROBOT - فلسطين", radarTitle: "رادار الروبوت", targetLabel: "جاري التتبع: HK-ROBOT-01", status: "حالة النظام", speed: "السرعة", power: "البطارية" },
+      de: { headerTitle: "HK ROBOT KONTROLLSYSTEM", radarTitle: "ROBOTER-RADAR", targetLabel: "VERFOLGUNG: HK-ROBOT-01", status: "SYSTEMSTATUS", speed: "GESCHWINDIGKEIT", power: "BATTERIE" },
+      it: { headerTitle: "SISTEMA DI CONTROLLO HK ROBOT", radarTitle: "RADAR ROBOT", targetLabel: "TRACCIAMENTO: HK-ROBOT-01", status: "STATO SISTEMA", speed: "VELOCITÀ", power: "BATTERIA" },
+      fr: { headerTitle: "SYSTÈME DE CONTRÔLE HK ROBOT", radarTitle: "RADAR ROBOT", targetLabel: "SUIVI: HK-ROBOT-01", status: "ÉTAT SYSTÈME", speed: "VITESSE", power: "BATTERIE" }
     };
 
     function changeLanguage(lang) {
